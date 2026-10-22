@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#1E6FD9">
+<title>Trip · Flight Tracker</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo" aria-hidden="true">✈</span> Flight Tracker</div>
+  <h1 id="title">Trip</h1>
+  <p id="subtitle" class="muted"></p>
+</header>
+<main id="main" aria-live="polite"><div class="card skeleton">Loading trip…</div></main>
+<footer class="foot">
+  <p id="updated" class="muted"></p>
+  <p class="muted small">Shared by the traveller with Flight Tracker. This page sets no cookies and uses no trackers or analytics.
+    The link stops working 12 hours after the last flight lands. <a href="privacy.html">Privacy</a></p>
+</footer>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
