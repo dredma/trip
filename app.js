@@ -21,7 +21,9 @@
   }
 
   const ms = (s) => (s ? Date.parse(s) : NaN);
-  // 24 h (HH:mm) by default; ?h=12 switches to AM/PM. Dates always "Thu 22 Oct".
+  // 24 h (HH:mm) by default; ?h=12 switches to AM/PM.
+  // Dates "Thu 22 Oct" by default; ?d=dmy_dot|dmy_slash|mdy|iso mirrors the app's date format.
+  const dStyle = new URLSearchParams(location.search).get("d") || "";
   let h12 = new URLSearchParams(location.search).get("h") === "12";
   function fmtTime(iso, tz) {
     if (!iso) return "–";
@@ -32,6 +34,12 @@
   }
   function fmtDay(iso, tz) {
     const f = (z) => {
+      const n = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "2-digit", day: "2-digit", timeZone: z })
+        .formatToParts(new Date(iso)).map((x) => [x.type, x.value]));
+      if (dStyle === "dmy_dot") return `${n.day}.${n.month}.${n.year}`;
+      if (dStyle === "dmy_slash") return `${n.day}/${n.month}/${n.year}`;
+      if (dStyle === "mdy") return `${n.month}/${n.day}/${n.year}`;
+      if (dStyle === "iso") return `${n.year}-${n.month}-${n.day}`;
       const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: z })
         .formatToParts(new Date(iso)).map((x) => [x.type, x.value]));
       return `${parts.weekday} ${parts.day} ${parts.month}`;

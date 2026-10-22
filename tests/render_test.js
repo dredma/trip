@@ -9,7 +9,7 @@ const delay = { state: "active", display_name: "Kristian", expires_at: iso(14 * 
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   let fail = 0; const ok = (c, m) => { console.log((c ? "ok   " : "FAIL ") + m); if (!c) fail++; };
-  for (const [name, q, status, body] of [["share_trip_delay", "", 200, delay], ["share_trip_delay_12h", "&h=12", 200, delay], ["share_expired", "", 410, { state: "expired" }]]) {
+  for (const [name, q, status, body] of [["share_trip_delay", "", 200, delay], ["share_trip_delay_12h", "&h=12", 200, delay], ["share_trip_dmy_dot", "&d=dmy_dot", 200, delay], ["share_trip_iso_12h", "&h=12&d=iso", 200, delay], ["share_trip_bad_d", "&d=zzz", 200, delay], ["share_expired", "", 410, { state: "expired" }]]) {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, locale: "en-US", timezoneId: "Europe/Zagreb" });
     await ctx.addInitScript(`{ const N=${now}; const D=Date; Date.now=()=>N; }`);
     const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e)));
@@ -29,6 +29,13 @@ const delay = { state: "active", display_name: "Kristian", expires_at: iso(14 * 
       ok(ck.length === 0 && ls === 0, "no cookies/storage");
     }
     if (name === "share_trip_delay_12h") ok(/4:27 PM/.test(txt) && (await p.getAttribute("button[data-h=\"12\"]", "aria-pressed")) === "true", "h=12 param");
+    if (name === "share_trip_dmy_dot") ok(/22\.10\.2026/.test(txt) && /valid until 23\.10\.2026 01:19/.test(txt) && !/Thu 22 Oct/.test(txt), "d=dmy_dot");
+    if (name === "share_trip_iso_12h") {
+      ok(/2026-10-22/.test(txt) && /4:27 PM/.test(txt), "d=iso + h=12");
+      await p.click('#hfmt button[data-h="24"]');
+      ok(p.url().includes("d=iso") && !p.url().includes("h=12"), "toggle keeps d");
+    }
+    if (name === "share_trip_bad_d") ok(/Thu 22 Oct/.test(txt), "unknown d -> default");
     await p.screenshot({ path: `/workspace/screenshots/${name}.png`, fullPage: true });
     ok(errs.length === 0, name + " no JS errors " + errs.join("|"));
     await ctx.close();
