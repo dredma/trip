@@ -61,7 +61,10 @@
   function statusOf(leg, t) {
     const s = leg.live && leg.live.status;
     const now = Date.now();
-    let [label, cls] = STATUS[s] || (now > ms(t.arrBest) ? ["Landed?", ""] : now > ms(t.depBest) ? ["Departed?", ""] : ["Scheduled", ""]);
+    // Without live data never guess landed/departed: a delayed flight may still be
+    // on the ground or in the air. Only well past scheduled arrival (+6 h) say so.
+    let [label, cls] = STATUS[s] || (!leg.live && now > ms(t.arrS) + 6 * 3600000 ? ["No live data", ""]
+      : !leg.live && now > ms(t.depS) - 6 * 3600000 ? ["Awaiting live data", ""] : ["Scheduled", ""]);
     const late = (ms(t.depBest) - ms(t.depS)) / MIN;
     if ((label === "Scheduled" || label === "Check-in") && late >= 15) { label = "Delayed"; cls = "bad"; }
     return { label, cls, inAir: s === "EnRoute" || s === "Departed" || s === "Approaching" };
@@ -148,8 +151,17 @@
     $("subtitle").textContent = `${fmtDay(first.dep_utc, first.dep_tz)} · ${legs.length} flight${legs.length > 1 ? "s" : ""}`;
     const kids = [];
     legs.forEach((l, i) => { if (i) kids.push(layover(legs[i - 1], l)); kids.push(legCard(l, i, legs.length)); });
-    if (data.live_enabled === false || legs.every((l) => !l.live))
-      kids.push(h("p", { class: "notice" }, "Live status appears from 6 hours before departure. Times shown are scheduled, in each airport's local time."));
+    const ERR = {
+      quota: "Live updates are paused for now (data limit reached). Times shown may be out of date.",
+      upstream: "The flight data service is not answering right now; retrying automatically.",
+      config: "Live flight data is not available for this link right now.",
+      not_found: "No live data found for this flight yet.",
+    };
+    const now = Date.now();
+    const anySoon = legs.some((l) => now > ms(l.dep_utc) - 6 * 3600000);
+    if (data.live_error && ERR[data.live_error]) kids.push(h("p", { class: "notice warn" }, "⚠ " + ERR[data.live_error]));
+    if (legs.every((l) => !l.live))
+      kids.push(h("p", { class: "notice" }, (anySoon ? "Waiting for live data." : "Live status appears from 6 hours before departure.") + " Times shown are scheduled, in each airport's local time."));
     else kids.push(h("p", { class: "notice" }, "Times are local to each airport."));
     main.replaceChildren(...kids);
     const fetched = legs.map((l) => ms(l.fetched_at)).filter((x) => !isNaN(x));

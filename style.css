@@ -63,3 +63,4 @@ main { display: flex; flex-direction: column; gap: 12px; }
 .state h2 { margin: 8px 0 6px; font-size: 20px; }
 .notice { font-size: 13px; color: var(--muted); padding: 0 4px; }
 .foot { padding: 20px 4px 28px; display: grid; gap: 8px; }
+.notice.warn { color: var(--warn); }
