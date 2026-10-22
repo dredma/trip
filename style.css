@@ -64,3 +64,6 @@ main { display: flex; flex-direction: column; gap: 12px; }
 .notice { font-size: 13px; color: var(--muted); padding: 0 4px; }
 .foot { padding: 20px 4px 28px; display: grid; gap: 8px; }
 .notice.warn { color: var(--warn); }
+.hfmt { display: flex; align-items: center; gap: 2px; font-size: 13px; color: var(--muted); }
+.hfmt button { font: inherit; color: var(--muted); background: none; border: 0; padding: 4px 6px; border-radius: 6px; cursor: pointer; }
+.hfmt button[aria-pressed="true"] { color: var(--primary); font-weight: 600; background: var(--primary-c); }

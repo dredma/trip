@@ -21,14 +21,22 @@
   }
 
   const ms = (s) => (s ? Date.parse(s) : NaN);
+  // 24 h (HH:mm) by default; ?h=12 switches to AM/PM. Dates always "Thu 22 Oct".
+  let h12 = new URLSearchParams(location.search).get("h") === "12";
   function fmtTime(iso, tz) {
     if (!iso) return "–";
-    try { return new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit", timeZone: tz || "UTC" }).format(new Date(iso)); }
-    catch { return new Intl.DateTimeFormat(undefined, { hour: "2-digit", minute: "2-digit", timeZone: "UTC" }).format(new Date(iso)) + " UTC"; }
+    const o = h12 ? { hour: "numeric", minute: "2-digit", hour12: true } : { hour: "2-digit", minute: "2-digit", hourCycle: "h23" };
+    const loc = h12 ? "en-US" : "en-GB";
+    try { return new Intl.DateTimeFormat(loc, { ...o, timeZone: tz || undefined }).format(new Date(iso)); }
+    catch { return new Intl.DateTimeFormat(loc, { ...o, timeZone: "UTC" }).format(new Date(iso)) + " UTC"; }
   }
   function fmtDay(iso, tz) {
-    try { return new Intl.DateTimeFormat(undefined, { weekday: "short", day: "numeric", month: "short", timeZone: tz || "UTC" }).format(new Date(iso)); }
-    catch { return ""; }
+    const f = (z) => {
+      const parts = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", timeZone: z })
+        .formatToParts(new Date(iso)).map((x) => [x.type, x.value]));
+      return `${parts.weekday} ${parts.day} ${parts.month}`;
+    };
+    try { return f(tz || undefined); } catch { try { return f("UTC"); } catch { return ""; } }
   }
   function dur(m) {
     m = Math.round(Math.abs(m));
@@ -166,7 +174,7 @@
     main.replaceChildren(...kids);
     const fetched = legs.map((l) => ms(l.fetched_at)).filter((x) => !isNaN(x));
     $("updated").textContent = (fetched.length ? `Flight data updated ${ago(Math.max(...fetched))}` : "No live data yet")
-      + ` · page checked ${ago(lastOk)}` + (data.expires_at ? ` · link valid until ${fmtDay(data.expires_at, last.arr_tz)} ${fmtTime(data.expires_at, last.arr_tz)}` : "");
+      + ` · page checked ${fmtTime(new Date(lastOk).toISOString())}` + (data.expires_at ? ` · link valid until ${fmtDay(data.expires_at, last.arr_tz)} ${fmtTime(data.expires_at, last.arr_tz)}` : "");
   }
 
   async function load() {
@@ -196,6 +204,21 @@
     clearTimeout(timer);
     timer = setTimeout(load, delay);
   }
+  // Viewer toggle 24h | AM/PM: updates the URL (no cookies/storage).
+  const tg = $("hfmt");
+  function syncToggle() {
+    for (const b of tg.querySelectorAll("button")) b.setAttribute("aria-pressed", String((b.dataset.h === "12") === h12));
+  }
+  tg.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    h12 = b.dataset.h === "12";
+    const u = new URL(location.href);
+    if (h12) u.searchParams.set("h", "12"); else u.searchParams.delete("h");
+    history.replaceState(null, "", u);
+    syncToggle();
+    if (lastData) render(lastData);
+  });
+  syncToggle();
   document.addEventListener("visibilitychange", () => { if (!document.hidden && lastOk && Date.now() - lastOk > 60000) load(); });
   load();
 })();
