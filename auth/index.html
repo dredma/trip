@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src https://vtjtiyypfjjgbakziyjs.supabase.co; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#1E6FD9">
 <title>Account · Flight Tracker</title>
 <link rel="icon" href="data:,">
@@ -16,10 +16,23 @@
   <div class="brand"><span class="logo" aria-hidden="true">✈</span> Flight Tracker</div>
   <h1 id="title">Account</h1>
 </header>
-<main aria-live="polite"><div class="card"><p id="msg">Checking link…</p></div></main>
+<main aria-live="polite"><div class="card">
+  <p id="msg">Checking link…</p>
+  <form id="reset-form" class="auth-form" hidden>
+    <label for="pw">New password
+      <input type="password" id="pw" name="password" autocomplete="new-password" minlength="6" required>
+    </label>
+    <label for="pw2">Confirm
+      <input type="password" id="pw2" name="confirm" autocomplete="new-password" minlength="6" required>
+    </label>
+    <p id="form-err" class="auth-err" hidden></p>
+    <button type="submit" id="submit">Set new password</button>
+  </form>
+</div></main>
 <footer class="foot">
   <p class="muted small">This page sets no cookies, stores nothing and uses no trackers or analytics. <a href="../privacy.html">Privacy</a></p>
 </footer>
+<script src="../config.js"></script>
 <script src="auth.js"></script>
 </body>
 </html>
