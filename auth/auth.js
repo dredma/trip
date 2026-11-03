@@ -7,6 +7,12 @@
   var accessToken = g('access_token');
   var refreshToken = g('refresh_token');
   var code = g('code');
+  // Magic links are only sent by the account-deletion page: hand the token
+  // over to it (fragment only, never sent to a server) and stop here.
+  if (type === 'magiclink' || q.get('next') === 'delete') {
+    location.replace('../delete/' + (location.hash || ''));
+    return;
+  }
   // Drop tokens from the address bar and history immediately; never stored.
   try { history.replaceState(null, '', location.pathname); } catch (e) {}
 

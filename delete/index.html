@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; connect-src https://vtjtiyypfjjgbakziyjs.supabase.co; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#DD3082">
+<meta name="description" content="How to delete your Nimbo account and data.">
+<title>Delete your Nimbo account</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="delete.css">
+</head>
+<body>
+<header class="hero">
+  <div class="brand"><span class="logo" aria-hidden="true">✈</span> Nimbo</div>
+  <h1>Delete your account</h1>
+  <p>Your flights live on your phone. Only the optional online account is stored on our server, and you can delete it at any time.</p>
+</header>
+<main>
+  <section class="card" id="in-app">
+    <h2>In the app</h2>
+    <ol class="steps">
+      <li>Open <b>Settings</b> → <b>Friends &amp; cloud</b>.</li>
+      <li>In <b>Your data on the server</b>, tap <b>Delete my account and data</b>.</li>
+      <li>Confirm with <b>Delete</b>. Tick <b>Also delete all data on this phone</b> to wipe the phone too.</li>
+    </ol>
+    <p class="muted">It happens immediately and cannot be undone.</p>
+  </section>
+
+  <section class="card" id="web">
+    <h2>No app any more?</h2>
+    <p>Enter the email of your account. We send a one-time sign-in link to it, so only you can confirm.</p>
+    <form id="request-form" novalidate>
+      <label for="email">Account email</label>
+      <input type="email" id="email" name="email" autocomplete="email" inputmode="email" required>
+      <button type="submit" id="request-btn">Send link</button>
+      <p id="request-msg" class="note" role="status" hidden></p>
+    </form>
+    <div id="confirm-box" hidden>
+      <p><b id="confirm-title">Delete this account?</b></p>
+      <p id="confirm-text">This deletes your Nimbo account and everything listed below. It cannot be undone.</p>
+      <button type="button" id="confirm-btn" class="danger">Delete my account</button>
+      <p id="confirm-msg" class="note" role="status" hidden></p>
+    </div>
+  </section>
+
+  <section class="card" id="what">
+    <h2>What is deleted</h2>
+    <ul>
+      <li>Your account, email and password</li>
+      <li>Profile: name, handle, avatar, published stats</li>
+      <li>Friends, friend requests and privacy settings</li>
+      <li>Shared flights, messages and reactions</li>
+      <li>Shared trip links</li>
+      <li>Cloud backup of your flights</li>
+    </ul>
+    <h2>What may be kept</h2>
+    <ul>
+      <li><b>Anonymous statistics</b> you chose to contribute are not linked to your account. Deleting in the app removes them too; after a web deletion they cannot be traced back to you.</li>
+      <li><b>Security logs</b> at our hosting provider (IP address, time) for a few days. A hashed rate-limit counter for up to one hour.</li>
+      <li><b>Pro purchases</b>: Google Play keeps its own purchase records.</li>
+      <li><b>Data on your phone</b> stays until you wipe it or uninstall the app.</li>
+    </ul>
+    <p class="muted">We keep no other copies or backups.</p>
+  </section>
+</main>
+<footer class="foot">
+  <p>No cookies, no trackers. <a href="../privacy.html">Privacy</a></p>
+</footer>
+<script src="../config.js"></script>
+<script src="delete.js"></script>
+</body>
+</html>
