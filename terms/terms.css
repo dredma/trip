@@ -1,0 +1,31 @@
+/* Nimbo sunset palette (lib/app/nimbo_splash.dart). Nunito is self-hosted (OFL). */
+@font-face { font-family: "Nunito"; font-style: normal; font-weight: 400 800; font-display: swap; src: url("../fonts/nunito-latin.woff2") format("woff2"); }
+:root {
+  --s1: #441E8D; --s2: #692697; --s3: #A52A94; --s4: #DD3082; --s5: #F5455E; --s6: #FC5739; --s7: #FD6229;
+  --bg: #fff7f3; --card: #ffffff; --text: #2a1640; --muted: #6b5a78; --line: #f1dde3; --accent: #c4246f;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #160c24; --card: #241536; --text: #f6ecf7; --muted: #c6b3cf; --line: #3a2650; --accent: #ff7aa8; }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; font: 16px/1.55 "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); }
+.hero { color: #fff; padding: 28px 20px 56px; background: linear-gradient(160deg, var(--s1) 0%, var(--s2) 15%, var(--s3) 30%, var(--s4) 45%, var(--s5) 60%, var(--s6) 78%, var(--s7) 100%); }
+.hero > * { max-width: 640px; margin-left: auto; margin-right: auto; }
+.brand { font-weight: 800; display: flex; align-items: center; gap: 8px; }
+.logo { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: rgba(255,255,255,.22); }
+h1 { font-size: 30px; font-weight: 800; margin: 18px auto 6px; line-height: 1.15; }
+.hero p { margin-top: 0; opacity: .95; }
+main { max-width: 640px; margin: -36px auto 0; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 20px; padding: 18px 18px 14px; box-shadow: 0 6px 24px rgba(68,30,141,.08); }
+h2 { font-size: 19px; font-weight: 800; margin: 22px 0 8px; }
+.card > h2:first-child { margin-top: 0; }
+p { margin: 0 0 10px; }
+.card p:last-child, .card ul:last-child { margin-bottom: 4px; }
+ul { padding-left: 22px; margin: 0 0 10px; }
+li { margin: 4px 0; }
+.muted { color: var(--muted); font-size: 14px; }
+.placeholder { border: 1px dashed var(--accent); background: var(--bg); padding: 10px 12px; border-radius: 12px; }
+a { color: var(--accent); }
+.foot { max-width: 640px; margin: 0 auto; padding: 18px 20px 28px; color: var(--muted); font-size: 13px; text-align: center; }

@@ -22,3 +22,12 @@ link (`type=magiclink`) to `delete/`, where the user taps *Delete my account*
 and the function runs the same `delete_my_account` RPC as the app.
 Nunito is self-hosted in `fonts/` (SIL Open Font License). Test:
 `node tests/delete_page_test.js` (needs jsdom).
+
+## Terms of Service
+
+`https://dredma.github.io/trip/terms/` is the public Terms of Service for
+Google Play (trader-status / in-app purchases). Styled like the deletion
+page (sunset palette, self-hosted Nunito). Links are relative so the same
+files can later be served from nimbo.fly. The in-app copy lives in the app
+repo as `docs/terms-of-service.md`.
+
