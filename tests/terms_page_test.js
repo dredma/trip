@@ -7,10 +7,12 @@ const css = fs.readFileSync(path.join(__dirname, '../terms/terms.css'), 'utf8');
 
 function ok(c, m) { if (!c) throw new Error(m); }
 
-ok(/Last updated 13 November 2026/.test(html), 'date');
+ok(/Last updated 16 November 2026/.test(html), 'date');
 ok(/Kristian Popovic/.test(html), 'provider');
 ok(/popovickristian@gmail.com/.test(html), 'email');
-ok(/To be completed: the legal address/.test(html), 'address placeholder');
+ok(/Brace Pesel 3, 52210 Rovinj, Croatia/.test(html), 'business address');
+ok(!/To be completed/.test(html), 'no address placeholder');
+ok(!/once it is completed/.test(html), 'contact uses address');
 ok(/pro_lifetime/.test(html), 'product id');
 ok(/not a subscription/.test(html), 'lifetime unlock');
 ok(/14-day right of withdrawal/.test(html), 'EU withdrawal');
@@ -28,6 +30,8 @@ ok(/font-src 'self'/.test(html), 'csp fonts');
 ok(!/script-src/.test(html), 'no scripts');
 
 const privacy = fs.readFileSync(path.join(__dirname, '../privacy.html'), 'utf8');
+ok(/Brace Pesel 3, 52210 Rovinj, Croatia/.test(privacy), 'trip-link privacy address');
+ok(!/contact details to be completed/.test(privacy), 'no privacy placeholder');
 ok(/href="\.\/terms\/"/.test(privacy), 'privacy links to terms');
 const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8');
 ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
