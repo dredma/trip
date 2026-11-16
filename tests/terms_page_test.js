@@ -36,4 +36,11 @@ ok(/href="\.\/terms\/"/.test(privacy), 'privacy links to terms');
 const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8');
 ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
 
+const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'utf8');
+ok(/Who is responsible/.test(policy), 'policy controller heading');
+ok(/Kristian Popovic, Brace Pesel 3, 52210 Rovinj, Croatia/.test(policy), 'policy address');
+ok(/popovickristian@gmail.com/.test(policy), 'policy email');
+ok(/Effective: 16 November 2026/.test(policy), 'policy date');
+ok(!/to be completed/.test(policy), 'no policy placeholder');
+
 console.log('ok    terms page');
