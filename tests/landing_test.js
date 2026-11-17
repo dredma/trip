@@ -19,7 +19,14 @@ ok(/contact@nimbo.fly/.test(html), 'contact email');
 ok(/href="privacy\/"/.test(html), 'privacy link');
 ok(/href="terms\/"/.test(html), 'terms link');
 ok(/href="delete\/"/.test(html), 'delete link');
-ok(/A private logbook for every flight you take/.test(html), 'tagline');
+ok(/Your private logbook for every flight/.test(html), 'tagline');
+ok(/Try it free/.test(html), 'primary CTA');
+ok(/play\.js/.test(html) && /data-play/.test(html), 'Play slot and play.js');
+ok(/shots\/flights\.(avif|webp|png)/.test(html), 'hero screenshot');
+ok(/type="image\/avif"/.test(html) && /type="image\/webp"/.test(html), 'avif and webp sources');
+ok(/loading="lazy"/.test(html), 'lazy-load below-fold shots');
+ok(/No account needed|no account needed/.test(html), 'no account needed');
+ok(/local-first/.test(html), 'local-first');
 ok(/one-time lifetime unlock/.test(html), 'Pro lifetime');
 ok(/7-day trial/.test(html), 'Pro trial');
 ok(/not a subscription/.test(html), 'not a subscription');
@@ -54,5 +61,15 @@ ok(apply('https://nimbo.fly/?t=AbCd') === '/trip/?t=AbCd', 'root ?t= redirects')
 ok(apply('https://nimbo.fly/?t=AbCd&h=12&d=iso#x') === '/trip/?t=AbCd&h=12&d=iso#x', 'preserves query and hash');
 ok(apply('https://nimbo.fly/') == null, 'root without t stays');
 ok(apply('https://nimbo.fly/?h=12') == null, 'no redirect without t');
+
+
+const play = fs.readFileSync(path.join(root, 'play.js'), 'utf8');
+ok(/const PLAY_URL = "https:\/\/play\.google\.com\/store\/apps\/details\?id=com\.kristian\.nimbo"/.test(play), 'Play URL in play.js');
+ok(/const PLAY_LIVE = false/.test(play), 'Play listing flagged as not live');
+ok(!/PLAY_LIVE = true/.test(play), 'Play listing is not live yet');
+
+const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
+ok(/document\.title = .* · Nimbo/.test(app), 'viewer document title uses Nimbo');
+ok(!/Flight Tracker/.test(app), 'viewer JS has no Flight Tracker title');
 
 console.log('ok    landing page');

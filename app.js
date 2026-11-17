@@ -153,7 +153,7 @@
       missing: ["🔗", "No trip link", "Open the link the traveller sent you; it ends with ?t= and a code."],
     }[kind] || ["⚠", "Something went wrong", "Please try again in a few minutes."];
     $("title").textContent = "Trip"; $("subtitle").textContent = ""; $("updated").textContent = "";
-    document.title = S[1] + " · Flight Tracker";
+    document.title = S[1] + " · Nimbo";
     main.replaceChildren(h("div", { class: "card state" }, h("div", { class: "big", "aria-hidden": "true" }, S[0]),
       h("h2", {}, S[1]), h("p", { class: "muted" }, S[2])));
   }
@@ -163,7 +163,7 @@
     const first = legs[0], last = legs[legs.length - 1];
     const who = data.display_name ? `${data.display_name}'s trip` : "Trip";
     $("title").textContent = `${who}: ${[first.dep, ...legs.map((l) => l.arr)].join(" → ")}`;
-    document.title = `${who} · Flight Tracker`;
+    document.title = `${who} · Nimbo`;
     $("subtitle").textContent = `${fmtDay(first.dep_utc, first.dep_tz)} · ${legs.length} flight${legs.length > 1 ? "s" : ""}`;
     const kids = [];
     legs.forEach((l, i) => { if (i) kids.push(layover(legs[i - 1], l)); kids.push(legCard(l, i, legs.length)); });

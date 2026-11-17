@@ -33,3 +33,31 @@ Test: `node tests/delete_page_test.js` (needs jsdom).
 Google Play (trader-status / in-app purchases). Styled like the deletion
 page (sunset palette, self-hosted Nunito). The in-app copy lives in the app
 repo as `docs/terms-of-service.md`.
+
+## Google Play badge
+
+The Play Store URL and live flag live in one place: `play.js`.
+
+```js
+const PLAY_URL = "https://play.google.com/store/apps/details?id=com.kristian.nimbo";
+const PLAY_LIVE = false;
+```
+
+Keep `PLAY_LIVE` at `false` until the listing is public. The landing then shows a
+non-clickable “Coming soon on Google Play” label (not the official badge, and
+not a link).
+
+When the listing is live, set `PLAY_LIVE` to `true` and leave `PLAY_URL`
+unchanged. The page then shows Google’s official “Get it on Google Play” badge
+(`badges/google-play-badge.png`, unmodified) and links to that URL.
+
+The official badge is used under
+[Google Play badge guidelines](https://play.google.com/intl/en_us/badges/): only
+to advertise the app on Google Play, and without altering the artwork.
+
+## App screenshots
+
+`shots/` holds device screenshots of the real app, captured from a test-only
+harness in the app repo (`test/landing_screenshots_test.dart`) with made-up
+demo data. Each shot is stored as AVIF and WebP, with a PNG fallback.
+

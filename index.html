@@ -8,10 +8,10 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#DD3082">
 <title>Nimbo – My Flight Log</title>
-<meta name="description" content="A private logbook for every flight you take. Scan boarding passes, see your routes on a 3D globe, and keep it all on your phone.">
+<meta name="description" content="Your private logbook for every flight. Scan a boarding pass, follow live gates and delays, and see every route on a map — all on your phone.">
 <link rel="canonical" href="https://nimbo.fly/">
 <meta property="og:title" content="Nimbo – My Flight Log">
-<meta property="og:description" content="A private logbook for every flight you take.">
+<meta property="og:description" content="Your private logbook for every flight.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nimbo.fly/">
 <meta property="og:image" content="https://nimbo.fly/og.png">
@@ -19,7 +19,7 @@
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nimbo – My Flight Log">
-<meta name="twitter:description" content="A private logbook for every flight you take.">
+<meta name="twitter:description" content="Your private logbook for every flight.">
 <meta name="twitter:image" content="https://nimbo.fly/og.png">
 <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
 <link rel="icon" href="icon.png" type="image/png" sizes="512x512">
@@ -28,55 +28,122 @@
 </head>
 <body>
 <header class="hero">
-  <img class="icon" src="icon.png" width="96" height="96" alt="Nimbo">
-  <h1>Nimbo</h1>
-  <p class="tagline">A private logbook for every flight you take.</p>
-  <p class="soon">Coming soon on Google Play</p>
+<div class="hero-inner">
+  <div class="hero-copy">
+    <img class="icon" src="icon.png" width="72" height="72" alt="Nimbo">
+    <h1>Nimbo</h1>
+    <p class="tagline">Your private logbook for every flight.</p>
+    <p class="lead">Scan a pass, follow live gates, and see your routes on a map. It stays on your phone.</p>
+    <div class="hero-cta">
+      <a class="cta" href="#try">Try it free</a>
+      <div class="play-slot" data-play>
+        <p class="soon">Coming soon on Google Play</p>
+      </div>
+    </div>
+  </div>
+  <div class="hero-phone">
+    <figure class="phone">
+      <div class="bezel">
+        <picture>
+          <source type="image/avif" srcset="shots/flights.avif">
+          <source type="image/webp" srcset="shots/flights.webp">
+          <img src="shots/flights.png" width="1080" height="2340" alt="Nimbo flight list with a live Swiss flight from Zurich to Lisbon, gates and a 14-minute delay." decoding="async" fetchpriority="high">
+        </picture>
+      </div>
+    </figure>
+  </div>
+</div>
 </header>
+
 <main>
-  <section class="features" aria-label="Features">
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h10M4 17h7"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg></span> Log flights</h2>
-      <p>Scan a boarding pass, import a booking or CSV, or type it in. The pass is read on your phone. The photo is never stored.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span> Live status</h2>
-      <p>Times, gates and delays, with no API key to set up. Pro adds gate and delay alerts, plus home-screen widgets.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18 14 14 0 0 1 0-18"/><path d="M3.5 8h17M3.5 16h17"/></svg></span> Maps</h2>
-      <p>Every route on a spinning 3D globe or a flat map, with a route heat map.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19V5h16v14"/><path d="M8 15l3-4 3 2 4-6"/></svg></span> Stats &amp; passport</h2>
-      <p>Distance, time in the air, airports, airlines and records. Pro adds country stamps and a year in review.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M3 20v-1a5 5 0 0 1 10 0v1M13 20v-1a5 5 0 0 1 8-4"/></svg></span> Friends &amp; community</h2>
-      <p>An optional account lets you share flights with friends. Pro adds friend insights and opt-in community comparison.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M8 20l4-8 4 8M9.5 16h5"/></svg></span> Achievements</h2>
+  <section class="feature">
+    <div class="copy">
+      <h2>Live status</h2>
+      <p>Times, gates and delays, with no API key to set up. Pro adds alerts and home-screen widgets.</p>
+    </div>
+    <figure class="phone">
+      <div class="bezel">
+        <picture>
+          <source type="image/avif" srcset="shots/detail.avif">
+          <source type="image/webp" srcset="shots/detail.webp">
+          <img src="shots/detail.png" width="1080" height="2340" alt="Flight detail for Swiss LX 2084, en route from Zurich to Lisbon, showing live times, terminal, gate and a 14-minute delay." loading="lazy" decoding="async">
+        </picture>
+      </div>
+    </figure>
+  </section>
+
+  <section class="feature alt">
+    <div class="copy">
+      <h2>Every route, on a map</h2>
+      <p>A spinning 3D globe or a flat map, with a route heat map. Tap an airport to see inbound and outbound flights.</p>
+    </div>
+    <figure class="phone">
+      <div class="bezel">
+        <picture>
+          <source type="image/avif" srcset="shots/map.avif">
+          <source type="image/webp" srcset="shots/map.webp">
+          <img src="shots/map.png" width="1080" height="2340" alt="World map in Nimbo with golden route arcs across Europe, Asia, the Americas and the Pacific." loading="lazy" decoding="async">
+        </picture>
+      </div>
+    </figure>
+  </section>
+
+  <section class="feature">
+    <div class="copy">
+      <h2>Stats &amp; passport</h2>
+      <p>Distance, time in the air, airports and records. Pro adds country stamps and a year in review.</p>
+    </div>
+    <div class="pair">
+      <figure class="phone sm">
+        <div class="bezel">
+          <picture>
+            <source type="image/avif" srcset="shots/stats.avif">
+            <source type="image/webp" srcset="shots/stats.webp">
+            <img src="shots/stats.png" width="1080" height="2340" alt="Stats screen showing 25 flights, 141,315 kilometres and 183 hours in the air." loading="lazy" decoding="async">
+          </picture>
+        </div>
+      </figure>
+      <figure class="phone sm">
+        <div class="bezel">
+          <picture>
+            <source type="image/avif" srcset="shots/passport_stamps.avif">
+            <source type="image/webp" srcset="shots/passport_stamps.webp">
+            <img src="shots/passport_stamps.png" width="1080" height="2340" alt="Passport page with ink stamps for Switzerland, Japan, Brazil, the United Kingdom, Qatar and Singapore." loading="lazy" decoding="async">
+          </picture>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <section class="feature alt">
+    <div class="copy">
+      <h2>Achievements</h2>
       <p>Pro unlocks badges, avatars and passport stamps for the flying you have already logged.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8 16.5 16 7.5"/></svg></span> Share a live trip</h2>
-      <p>Send family a link to follow your trip live. A Pro feature. The link stops working 12 hours after you land.</p>
-    </article>
-    <article class="card">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span> Export &amp; posters</h2>
-      <p>Export a route poster of your flying. Pro adds calendar export of upcoming flights and a photo backup ZIP.</p>
-    </article>
-    <article class="card wide">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 5 7v6c0 4.5 3 7.5 7 8.5 4-1 7-4 7-8.5V7z"/></svg></span> Private by design</h2>
-      <p>Local-first, with no ads or trackers. Works fully without an account. GDPR, made in the EU. Export or delete your data at any time.</p>
-    </article>
-    <article class="card wide pro">
-      <h2><span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 16 7 5l5 4 5-4 2 11z"/><path d="M5 16h14v3H5z"/></svg></span> Free, with Pro for life</h2>
-      <p>Nimbo is free to use. Pro is a one-time lifetime unlock, with a 7-day trial — not a subscription.</p>
-    </article>
+    </div>
+    <figure class="phone">
+      <div class="bezel">
+        <picture>
+          <source type="image/avif" srcset="shots/badges.avif">
+          <source type="image/webp" srcset="shots/badges.webp">
+          <img src="shots/badges.png" width="1080" height="2340" alt="Badges screen with 43 of 72 stickers unlocked, including Wheels Up, Frequent Flyer and Long Way Round." loading="lazy" decoding="async">
+        </picture>
+      </div>
+    </figure>
+  </section>
+
+  <section class="try" id="try">
+    <h2>Try it free</h2>
+    <ul>
+      <li>Free to use, with no account needed</li>
+      <li>Private and local-first — no ads or trackers</li>
+      <li>Pro is a one-time lifetime unlock, with a 7-day trial — not a subscription</li>
+    </ul>
+    <div class="play-slot" data-play>
+      <p class="soon dark">Coming soon on Google Play</p>
+    </div>
   </section>
 </main>
+
 <footer class="foot">
   <nav>
     <a href="privacy/">Privacy</a>
@@ -86,5 +153,6 @@
   </nav>
   <p>No cookies, no trackers, no analytics.</p>
 </footer>
+<script src="play.js"></script>
 </body>
 </html>
