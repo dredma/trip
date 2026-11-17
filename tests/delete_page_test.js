@@ -19,7 +19,7 @@ async function main() {
   if (!JSDOM) { console.log('skip  jsdom not installed'); return; }
   // Request step
   let sent;
-  let w = load('https://dredma.github.io/trip/delete/', async (u, o) => { sent = { u, b: JSON.parse(o.body) }; return { ok: true, status: 200 }; });
+  let w = load('https://nimbo.fly/delete/', async (u, o) => { sent = { u, b: JSON.parse(o.body) }; return { ok: true, status: 200 }; });
   ok(!w.document.getElementById('request-form').hidden, 'form visible');
   ok(w.document.getElementById('confirm-box').hidden, 'confirm hidden');
   w.document.getElementById('email').value = 'a@example.com';
@@ -30,7 +30,7 @@ async function main() {
   ok(/sign-in link/.test(w.document.getElementById('request-msg').textContent), 'msg');
   // Confirm step: no deletion without a click; click sends the user token
   let auth = null;
-  w = load('https://dredma.github.io/trip/delete/#access_token=usertok&type=magiclink', async (u, o) => { auth = o.headers.Authorization; return { ok: true, status: 200 }; });
+  w = load('https://nimbo.fly/delete/#access_token=usertok&type=magiclink', async (u, o) => { auth = o.headers.Authorization; return { ok: true, status: 200 }; });
   ok(w.location.hash === '', 'token removed from URL');
   ok(!w.document.getElementById('confirm-box').hidden && w.document.getElementById('request-form').hidden, 'confirm shown');
   await tick();
@@ -41,7 +41,7 @@ async function main() {
   ok(/deleted/.test(w.document.getElementById('confirm-title').textContent), 'done');
   // Auth page forwards magic links
   const ah = fs.readFileSync(path.join(__dirname, '../auth/index.html'), 'utf8');
-  const ad = new JSDOM(ah, { url: 'https://dredma.github.io/trip/auth/#access_token=t&type=magiclink', runScripts: 'outside-only' });
+  const ad = new JSDOM(ah, { url: 'https://nimbo.fly/auth/#access_token=t&type=magiclink', runScripts: 'outside-only' });
   let to = null;
   const src = fs.readFileSync(path.join(__dirname, '../auth/auth.js'), 'utf8').replace('location.replace(', 'window.__go=(');
   ad.window.eval(src);

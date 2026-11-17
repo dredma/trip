@@ -1,6 +1,7 @@
 # Trip page for Flight Tracker
 
-Static page served by GitHub Pages at `https://dredma.github.io/trip/?t=TOKEN`.
+Static page served by GitHub Pages at `https://nimbo.fly/?t=TOKEN`.
+The previous address `https://dredma.github.io/trip/` redirects there.
 A Flight Tracker user creates a link in the app; anyone with the link can follow
 that trip (one flight or a connection) live without installing the app.
 
@@ -14,7 +15,7 @@ Local test: `python3 -m http.server` and open `http://localhost:8000/?t=<token>`
 
 ## Account deletion page
 
-`https://dredma.github.io/trip/delete/` is the public account-deletion URL for
+`https://nimbo.fly/delete/` is the public account-deletion URL for
 Google Play. It explains the in-app path and lets people without the app
 request deletion: the Edge Function `account-delete` (app repo) emails a
 one-time Supabase sign-in link to the account address; `auth/` forwards the
@@ -25,9 +26,9 @@ Nunito is self-hosted in `fonts/` (SIL Open Font License). Test:
 
 ## Terms of Service
 
-`https://dredma.github.io/trip/terms/` is the public Terms of Service for
+`https://nimbo.fly/terms/` is the public Terms of Service for
 Google Play (trader-status / in-app purchases). Styled like the deletion
 page (sunset palette, self-hosted Nunito). Links are relative so the same
-files can later be served from nimbo.fly. The in-app copy lives in the app
+files are served from nimbo.fly (dredma.github.io/trip redirects there). The in-app copy lives in the app
 repo as `docs/terms-of-service.md`.
 

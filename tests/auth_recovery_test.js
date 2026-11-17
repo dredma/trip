@@ -7,14 +7,14 @@ const { JSDOM } = (() => { try { return require('jsdom'); } catch (e) { return {
 async function main() {
   if (!JSDOM) {
     console.log('skip  jsdom not installed — manual check notes below');
-    console.log('MANUAL: open https://dredma.github.io/trip/auth/#access_token=x&refresh_token=y&type=recovery');
+    console.log('MANUAL: open https://nimbo.fly/auth/#access_token=x&refresh_token=y&type=recovery');
     console.log('  expect form; expired token -> request new link message');
     console.log('  confirm-email path (?type=signup or bare) still says Email confirmed');
     process.exit(0);
   }
   const html = fs.readFileSync(path.join(__dirname, '../auth/index.html'), 'utf8');
   const dom = new JSDOM(html, {
-    url: 'https://dredma.github.io/trip/auth/#access_token=tok&refresh_token=ref&type=recovery',
+    url: 'https://nimbo.fly/auth/#access_token=tok&refresh_token=ref&type=recovery',
     runScripts: 'outside-only',
     beforeParse(window) {
       window.TRIP_CONFIG = {
