@@ -118,22 +118,44 @@ h1 {
   display: block;
 }
 
-/* Phone mockup: device frame around a real app screenshot. */
+/* Phone mockup: device frame around a real app screenshot.
+   A simple max-width cap comes first so a failed calc cannot let the
+   1080px source image display at full size. A second width then also
+   caps by height (~70vh) on short laptop screens. */
 .phone {
+  --bezel: 22px;
   margin: 0;
-  width: min(260px, 68vw);
+  width: min(280px, 68vw, 100%);
+  max-width: 320px;
   filter: drop-shadow(0 24px 40px rgba(20, 8, 40, .35));
 }
-.phone.sm { width: min(200px, 42vw); }
+.phone.sm {
+  width: min(220px, 42vw, 100%);
+  max-width: 220px;
+}
+.hero .phone {
+  width: min(320px, 68vw, 100%);
+}
+.phone {
+  width: min(280px, 68vw, 100%, calc(70vh * 0.46 + var(--bezel)));
+}
+.phone.sm {
+  width: min(220px, 42vw, 100%, calc(70vh * 0.46 + var(--bezel)));
+}
+.hero .phone {
+  width: min(320px, 68vw, 100%, calc(72vh * 0.46 + var(--bezel)));
+}
 .bezel {
   background: var(--phone);
   border-radius: 32px;
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, .12);
+  overflow: hidden;
 }
 .bezel picture, .bezel img {
   display: block;
   width: 100%;
+  max-width: 100%;
   height: auto;
   border-radius: 22px;
   background: #111;
@@ -233,7 +255,6 @@ a { color: var(--accent); }
   .hero-copy { max-width: 32em; }
   .tagline, .lead { margin-left: 0; }
   .hero-cta { justify-content: flex-start; }
-  .hero .phone { width: 280px; }
   .feature {
     grid-template-columns: 1fr 1fr;
     align-items: center;
@@ -241,7 +262,7 @@ a { color: var(--accent); }
     gap: 48px;
     justify-items: start;
   }
-  .feature .phone { justify-self: center; width: 260px; }
+  .feature .phone { justify-self: center; }
   .feature.alt .copy { order: 2; }
   .feature.alt .phone { order: 1; }
   .feature .pair { grid-column: auto; }

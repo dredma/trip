@@ -37,6 +37,7 @@ ok(/Content-Security-Policy/.test(html), 'csp');
 ok(!/googletagmanager|google-analytics|gtag\(|plausible|analytics\.js/.test(html), 'no trackers');
 ok(/Nunito/.test(css) && /nunito-latin\.woff2/.test(css), 'self-hosted Nunito');
 ok(/#441E8D/.test(css) && /#FD6229/.test(css), 'sunset palette');
+ok(/70vh/.test(css) && /max-width: 320px/.test(css), 'phone frames capped on large screens');
 ok(/app\.js/.test(trip) && /config\.js/.test(trip), 'viewer still loads scripts');
 ok(/href="\.\.\/privacy\.html"/.test(trip), 'viewer privacy path');
 ok(/noindex/.test(trip), 'viewer stays noindex');
