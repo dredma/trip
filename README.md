@@ -1,17 +1,21 @@
-# Trip page for Flight Tracker
+# Nimbo website
 
-Static page served by GitHub Pages at `https://nimbo.fly/?t=TOKEN`.
-The previous address `https://dredma.github.io/trip/` redirects there.
-A Flight Tracker user creates a link in the app; anyone with the link can follow
-that trip (one flight or a connection) live without installing the app.
+Static site served by GitHub Pages at `https://nimbo.fly/`.
 
-* No build step, no dependencies, no cookies, no storage, no analytics, no third-party fonts or scripts.
-* Data comes from the Supabase Edge Function `trip` (source in the app repo,
-  `server/supabase/functions/trip`). `config.js` holds the project URL and the
-  **anon (public) key**, which is public by design.
-* Contains no personal data. Links expire 12 h after the last flight lands.
+* The root is the public presentation of Nimbo.
+* Live trip links are at `https://nimbo.fly/trip/?t=TOKEN`. Older links of the
+  form `https://nimbo.fly/?t=TOKEN` (and `https://dredma.github.io/trip/?t=TOKEN`)
+  redirect there, keeping the query string and hash.
+* No build step, no cookies, no storage, no analytics, no third-party fonts
+  or scripts. Nunito is self-hosted in `fonts/` (SIL Open Font License).
 
-Local test: `python3 -m http.server` and open `http://localhost:8000/?t=<token>`.
+The trip page reads live data from the Supabase Edge Function `trip` (source
+in the app repo, `server/supabase/functions/trip`). `config.js` holds the
+project URL and the **anon (public) key**, which is public by design. Links
+expire 12 h after the last flight lands.
+
+Local test: `python3 -m http.server` and open `http://localhost:8000/` or
+`http://localhost:8000/trip/?t=<token>`.
 
 ## Account deletion page
 
@@ -21,14 +25,11 @@ request deletion: the Edge Function `account-delete` (app repo) emails a
 one-time Supabase sign-in link to the account address; `auth/` forwards the
 link (`type=magiclink`) to `delete/`, where the user taps *Delete my account*
 and the function runs the same `delete_my_account` RPC as the app.
-Nunito is self-hosted in `fonts/` (SIL Open Font License). Test:
-`node tests/delete_page_test.js` (needs jsdom).
+Test: `node tests/delete_page_test.js` (needs jsdom).
 
 ## Terms of Service
 
 `https://nimbo.fly/terms/` is the public Terms of Service for
 Google Play (trader-status / in-app purchases). Styled like the deletion
-page (sunset palette, self-hosted Nunito). Links are relative so the same
-files are served from nimbo.fly (dredma.github.io/trip redirects there). The in-app copy lives in the app
+page (sunset palette, self-hosted Nunito). The in-app copy lives in the app
 repo as `docs/terms-of-service.md`.
-

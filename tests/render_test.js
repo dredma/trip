@@ -14,7 +14,7 @@ const delay = { state: "active", display_name: "Kristian", expires_at: iso(14 * 
     await ctx.addInitScript(`{ const N=${now}; const D=Date; Date.now=()=>N; }`);
     const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e)));
     await p.route('https://vtjtiyypfjjgbakziyjs.supabase.co/**', r => r.fulfill({ status, contentType: 'application/json', body: JSON.stringify(body) }));
-    await p.goto('http://localhost:8765/?t=AbCdEfGhIjKlMnOpQrStUv' + q); await p.waitForTimeout(700);
+    await p.goto('http://localhost:8765/trip/?t=AbCdEfGhIjKlMnOpQrStUv' + q); await p.waitForTimeout(700);
     const txt = await p.innerText('body');
     if (name === "share_trip_delay") {
       ok(/\b16:27\b/.test(txt) && !/\d (AM|PM)/.test(txt), "24h default even with en-US browser locale");
