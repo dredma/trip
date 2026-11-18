@@ -40,7 +40,7 @@ const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'u
 ok(/Who is responsible/.test(policy), 'policy controller heading');
 ok(/Kristian Popovic, Rovinj, Croatia/.test(policy), 'policy address');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
-ok(/Effective: 18 November 2026/.test(policy), 'policy date');
+ok(/Effective and last updated: 18 November 2026/.test(policy), 'policy date');
 ok(!/to be completed/.test(policy), 'no policy placeholder');
 
 ok(!/Flight Tracker/.test(privacy), 'trip-link note uses the Nimbo name');
