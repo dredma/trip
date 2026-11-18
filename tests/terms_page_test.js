@@ -38,8 +38,9 @@ const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8'
 ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
 
 const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'utf8');
-ok(/Who is responsible/.test(policy), 'policy controller heading');
-ok(/<h2>Who is responsible<\/h2>\s*<p>Nimbo is run by Kristian Popovic, Rovinj, Croatia · contact@nimbo\.fly<\/p>/.test(policy), 'policy one-line controller');
+ok(!/Who is responsible/.test(policy), 'no controller section');
+ok(/<footer class="foot">\s*<p>Nimbo flight log app for Android, by developer Kristian Popovic, Rovinj, Croatia · contact@nimbo\.fly<\/p>/.test(policy), 'controller in footer');
+ok(/write to privacy@nimbo\.fly/.test(policy), 'rights email kept');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
 ok(/Effective and last updated: 18 November 2026/.test(policy), 'policy date');
 ok(!/to be completed/.test(policy), 'no policy placeholder');
