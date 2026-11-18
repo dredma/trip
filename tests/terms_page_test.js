@@ -39,7 +39,7 @@ ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
 
 const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'utf8');
 ok(/Who is responsible/.test(policy), 'policy controller heading');
-ok(/Kristian Popovic, Rovinj, Croatia/.test(policy), 'policy address');
+ok(/<h2>Who is responsible<\/h2>\s*<p>Nimbo is run by Kristian Popovic, Rovinj, Croatia · contact@nimbo\.fly<\/p>/.test(policy), 'policy one-line controller');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
 ok(/Effective and last updated: 18 November 2026/.test(policy), 'policy date');
 ok(!/to be completed/.test(policy), 'no policy placeholder');
