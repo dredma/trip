@@ -10,7 +10,9 @@ function ok(c, m) { if (!c) throw new Error(m); }
 ok(/Last updated 18 November 2026/.test(html), 'date');
 ok(/Kristian Popovic/.test(html), 'provider');
 ok(/contact@nimbo.fly/.test(html), 'email');
-ok(/Location: Rovinj, Croatia/.test(html) && !/Brace|52210/.test(html), 'city and country only');
+ok(!/Who provides Nimbo|Location:/.test(html) && !/Brace|52210/.test(html), 'no provider section, city only');
+ok(/<footer class="foot">\s*<p>Nimbo is provided by Kristian Popovic \(“we”, “us”\), Rovinj, Croatia · <a href="mailto:contact@nimbo\.fly">/.test(html), 'provider in footer');
+ok(!/app id|com\.kristian\.nimbo/.test(html), 'no app id');
 ok(!/To be completed/.test(html), 'no address placeholder');
 ok(!/once it is completed/.test(html), 'contact uses address');
 ok(/pro_lifetime/.test(html), 'product id');
