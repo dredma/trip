@@ -15,7 +15,10 @@ ok(/<footer class="foot">\s*<p>Nimbo is provided by Kristian Popovic \(“we”,
 ok(!/app id|com\.kristian\.nimbo/.test(html), 'no app id');
 ok(!/To be completed/.test(html), 'no address placeholder');
 ok(!/once it is completed/.test(html), 'contact uses address');
-ok(/pro_lifetime/.test(html), 'product id');
+ok(!/pro_lifetime/.test(html), 'no product id');
+ok(!/own API key/.test(html), 'no API key sentence');
+ok(!/Questions about these terms|<h2>Contact<\/h2>/.test(html), 'no contact section');
+ok(!/quotas, rate limits/.test(html) && /Try to bypass Pro or security/.test(html), 'no quotas wording');
 ok(/not a subscription/.test(html), 'lifetime unlock');
 ok(/14-day right of withdrawal/.test(html), 'EU withdrawal');
 ok(/Pro features switch off/.test(html), 'pro lost');
@@ -49,5 +52,11 @@ ok(!/to be completed/.test(policy), 'no policy placeholder');
 
 ok(!/Flight Tracker/.test(privacy), 'trip-link note uses the Nimbo name');
 ok(!/Brace|52210/.test(privacy + policy), 'city and country only');
+
+// Feedback mailto in every legal footer and on the landing page.
+for (const f of ['../index.html', '../privacy/index.html', '../terms/index.html', '../delete/index.html', '../privacy.html']) {
+  const h = fs.readFileSync(path.join(__dirname, f), 'utf8');
+  ok(/<a href="mailto:contact@nimbo\.fly\?subject=Nimbo%20feedback">Feedback<\/a>/.test(h), 'feedback link in ' + f);
+}
 
 console.log('ok    terms page');
