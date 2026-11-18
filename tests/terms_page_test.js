@@ -40,6 +40,7 @@ ok(/Who is responsible\.<\/b> See our <a href="\.\/privacy\/">privacy policy<\/a
 ok(!/contact details to be completed/.test(privacy), 'no privacy placeholder');
 ok(/href="\.\/terms\/"/.test(privacy), 'privacy links to terms');
 const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8');
+ok(!/class="dev"/.test(del) && (del.match(/developer Kristian Popovic/g) || []).length === 1 && /<footer class="foot">\s*<p>Nimbo · developer Kristian Popovic/.test(del), 'delete page: developer line only in footer');
 ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
 
 const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'utf8');
