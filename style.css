@@ -24,6 +24,7 @@ body {
 a { color: var(--primary); }
 .top { padding: 20px 4px 8px; }
 .brand { font-size: 14px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+.logo-img { display: block; width: 32px; height: 32px; border-radius: 9px; }
 .logo { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 8px; background: var(--primary-c); color: var(--on-primary-c); font-size: 14px; }
 h1 { font-size: 26px; margin: 10px 0 2px; font-weight: 600; letter-spacing: -.2px; }
 .muted { color: var(--muted); margin: 0; }
