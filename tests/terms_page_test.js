@@ -46,6 +46,7 @@ ok(/<h2>Delete your account without the app<\/h2>/.test(del) && /confirm deletin
 
 const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'utf8');
 ok(!/Who is responsible/.test(policy), 'no controller section');
+ok(!/own API key/.test(policy + privacy), 'policy has no API key sentence');
 ok(/<footer class="foot">\s*<p>Nimbo flight log app for Android, by developer Kristian Popovic, Rovinj, Croatia · contact@nimbo\.fly<\/p>/.test(policy), 'controller in footer');
 ok(/write to privacy@nimbo\.fly/.test(policy), 'rights email kept');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
