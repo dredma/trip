@@ -30,7 +30,7 @@
   function showErr(msg) {
     t.textContent = 'Link expired or already used';
     m.textContent = msg ||
-      'This link is no longer valid. Request a new one from the Flight Tracker app.';
+      'This link is no longer valid. Request a new one from the Nimbo app.';
     form.hidden = true;
   }
 
@@ -41,9 +41,9 @@
 
   if (type === 'recovery') {
     t.textContent = 'Choose a new password';
-    m.textContent = 'Enter a new password for your Flight Tracker account (at least 6 characters).';
+    m.textContent = 'Enter a new password for your Nimbo account (at least 6 characters).';
     if (!accessToken && !code) {
-      showErr('This recovery link is missing tokens. Request a new one from the Flight Tracker app.');
+      showErr('This recovery link is missing tokens. Request a new one from the Nimbo app.');
       return;
     }
     form.hidden = false;
@@ -90,13 +90,13 @@
       function onFail() {
         btn.disabled = false;
         btn.textContent = 'Set new password';
-        showErr('Could not update the password (link may be expired). Request a new reset link from the Flight Tracker app.');
+        showErr('Could not update the password (link may be expired). Request a new reset link from the Nimbo app.');
       }
 
       function onOk() {
         form.hidden = true;
         t.textContent = 'Password updated ✓';
-        m.textContent = 'Password updated. Open Flight Tracker and sign in.';
+        m.textContent = 'Password updated. Open Nimbo and sign in.';
       }
 
       var start = accessToken
@@ -129,5 +129,5 @@
 
   // Confirm-email (and any other) success path — unchanged.
   t.textContent = 'Email confirmed ✓';
-  m.textContent = 'You can go back to the Flight Tracker app and sign in.';
+  m.textContent = 'You can go back to the Nimbo app and sign in.';
 })();

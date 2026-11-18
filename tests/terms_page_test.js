@@ -7,10 +7,10 @@ const css = fs.readFileSync(path.join(__dirname, '../terms/terms.css'), 'utf8');
 
 function ok(c, m) { if (!c) throw new Error(m); }
 
-ok(/Last updated 17 November 2026/.test(html), 'date');
+ok(/Last updated 18 November 2026/.test(html), 'date');
 ok(/Kristian Popovic/.test(html), 'provider');
 ok(/contact@nimbo.fly/.test(html), 'email');
-ok(/Brace Pesel 3, 52210 Rovinj, Croatia/.test(html), 'business address');
+ok(/Location: Rovinj, Croatia/.test(html) && !/Brace|52210/.test(html), 'city and country only');
 ok(!/To be completed/.test(html), 'no address placeholder');
 ok(!/once it is completed/.test(html), 'contact uses address');
 ok(/pro_lifetime/.test(html), 'product id');
@@ -30,7 +30,7 @@ ok(/font-src 'self'/.test(html), 'csp fonts');
 ok(!/script-src/.test(html), 'no scripts');
 
 const privacy = fs.readFileSync(path.join(__dirname, '../privacy.html'), 'utf8');
-ok(/Brace Pesel 3, 52210 Rovinj, Croatia/.test(privacy), 'trip-link privacy address');
+ok(/Rovinj, Croatia/.test(privacy), 'trip-link privacy address');
 ok(!/contact details to be completed/.test(privacy), 'no privacy placeholder');
 ok(/href="\.\/terms\/"/.test(privacy), 'privacy links to terms');
 const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8');
@@ -38,9 +38,12 @@ ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
 
 const policy = fs.readFileSync(path.join(__dirname, '../privacy/index.html'), 'utf8');
 ok(/Who is responsible/.test(policy), 'policy controller heading');
-ok(/Kristian Popovic, Brace Pesel 3, 52210 Rovinj, Croatia/.test(policy), 'policy address');
+ok(/Kristian Popovic, Rovinj, Croatia/.test(policy), 'policy address');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
-ok(/Effective: 17 November 2026/.test(policy), 'policy date');
+ok(/Effective: 18 November 2026/.test(policy), 'policy date');
 ok(!/to be completed/.test(policy), 'no policy placeholder');
+
+ok(!/Flight Tracker/.test(privacy), 'trip-link note uses the Nimbo name');
+ok(!/Brace|52210/.test(privacy + policy), 'city and country only');
 
 console.log('ok    terms page');
