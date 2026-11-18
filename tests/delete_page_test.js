@@ -27,7 +27,7 @@ async function main() {
   await tick();
   ok(sent.u === 'https://sb.test/functions/v1/account-delete', 'function url');
   ok(sent.b.action === 'request' && sent.b.email === 'a@example.com', 'body');
-  ok(/sign-in link/.test(w.document.getElementById('request-msg').textContent), 'msg');
+  ok(/deletion link/.test(w.document.getElementById('request-msg').textContent), 'msg');
   // Confirm step: no deletion without a click; click sends the user token
   let auth = null;
   w = load('https://nimbo.fly/delete/#access_token=usertok&type=magiclink', async (u, o) => { auth = o.headers.Authorization; return { ok: true, status: 200 }; });

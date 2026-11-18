@@ -64,7 +64,7 @@
     call({ action: 'request', email: email }).then(function (r) {
       if (r.status === 429) throw new Error('429');
       if (!r.ok) throw new Error(String(r.status));
-      say(msg, 'If an account exists for this email, we sent a sign-in link. Open it and tap Delete my account. The link is valid for one hour.', 'ok');
+      say(msg, 'If an account exists for this email, we sent a deletion link. Open it and tap Delete my account. The link is valid for one hour.', 'ok');
     }).catch(function (e) {
       btn.disabled = false;
       say(msg, e.message === '429' ? 'Too many requests. Please try again in an hour.' : 'Something went wrong. Please try again.', 'err');
