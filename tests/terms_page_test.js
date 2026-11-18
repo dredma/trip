@@ -30,7 +30,8 @@ ok(/font-src 'self'/.test(html), 'csp fonts');
 ok(!/script-src/.test(html), 'no scripts');
 
 const privacy = fs.readFileSync(path.join(__dirname, '../privacy.html'), 'utf8');
-ok(/Rovinj, Croatia/.test(privacy), 'trip-link privacy address');
+ok(!/Rovinj|Kristian Popovic|Controller\./.test(privacy), 'trip-link privacy has no controller address');
+ok(/Who is responsible\.<\/b> See our <a href="\.\/privacy\/">privacy policy<\/a>/.test(privacy) && /mailto:privacy@nimbo\.fly/.test(privacy), 'trip-link privacy points to policy');
 ok(!/contact details to be completed/.test(privacy), 'no privacy placeholder');
 ok(/href="\.\/terms\/"/.test(privacy), 'privacy links to terms');
 const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8');
