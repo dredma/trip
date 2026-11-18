@@ -50,7 +50,7 @@ ok(!/own API key/.test(policy + privacy), 'policy has no API key sentence');
 ok(/<footer class="foot">\s*<p>Nimbo flight log app for Android, by developer Kristian Popovic, Rovinj, Croatia · contact@nimbo\.fly<\/p>/.test(policy), 'controller in footer');
 ok(/write to privacy@nimbo\.fly/.test(policy), 'rights email kept');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
-ok(/Effective and last updated: 18 November 2026/.test(policy), 'policy date');
+ok(/<p>Effective and last updated: 18 November 2026<\/p>/.test(policy) && !/draft|not yet reviewed/i.test(policy + html + del + privacy), 'policy date, no draft label');
 ok(!/to be completed/.test(policy), 'no policy placeholder');
 
 ok(!/Flight Tracker/.test(privacy), 'trip-link note uses the Nimbo name');
