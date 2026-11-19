@@ -182,6 +182,15 @@ h1 {
   .hero .phone { width: calc(78vh * 0.46 + var(--bezel)); max-width: 300px; }
 }
 
+/* Hero frame matches the gallery's framed shots: bezel ~3% of the phone
+   width (it was 10px + border, noticeably thicker). */
+.hero .bezel {
+  padding: 3%;
+  border-radius: 28px;
+  border: 0;
+}
+.hero .bezel picture, .hero .bezel img { border-radius: 21px; }
+
 main { padding: 8px 0 24px; }
 
 /* Screenshot gallery: framed store shots in four groups.
@@ -330,6 +339,26 @@ a { color: var(--accent); }
    (not on sideways phones, which use the height-based rule above). */
 @media (min-width: 840px) and (min-height: 561px) {
   .hero .phone { width: min(250px, calc(60vh * 0.46 + var(--bezel))); }
+}
+/* Larger computer screens: everything a step bigger. */
+@media (min-width: 1100px) and (min-height: 561px) {
+  .hero { padding: 72px 48px 88px; }
+  .hero-inner { max-width: 1240px; gap: 72px; }
+  .hero-copy { max-width: 36em; }
+  .icon { width: 88px; height: 88px; border-radius: 22px; }
+  h1 { font-size: 76px; }
+  .tagline { font-size: 34px; }
+  .lead { font-size: 20px; }
+  .cta { font-size: 19px; padding: 14px 28px; }
+  .soon { font-size: 15px; padding: 10px 18px; }
+  .hero .phone { width: min(290px, calc(66vh * 0.46 + var(--bezel))); }
+  .group { max-width: 1320px; padding-top: 80px; }
+  .group h2 { font-size: 42px; }
+  .group p { font-size: 19px; }
+  .group .copy { max-width: 36em; }
+  .strip { gap: 36px; }
+  .strip li { flex-basis: 390px; }
+  .wide { max-width: 1160px; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
