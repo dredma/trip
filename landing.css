@@ -154,6 +154,34 @@ h1 {
   background: #111;
 }
 
+/* The hero phone column fills the row so the frame centres on it
+   (a shrink-to-fit column left the phone smaller and off-centre). */
+.hero-phone {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Phones turned sideways: short and wide. Put the copy and the phone side
+   by side so the phone can use the full height instead of shrinking under
+   the text. */
+@media (orientation: landscape) and (max-height: 560px) and (max-width: 1100px) {
+  .hero { padding: 24px 32px 32px; }
+  .hero-inner {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-items: stretch;
+    text-align: left;
+    gap: 32px;
+  }
+  .hero-copy { max-width: 30em; }
+  .hero-copy .icon { width: 56px; height: 56px; border-radius: 14px; }
+  .tagline, .lead { margin-left: 0; }
+  .hero-cta { justify-content: flex-start; }
+  .hero-phone { width: auto; }
+  .hero .phone { width: calc(78vh * 0.46 + var(--bezel)); max-width: 300px; }
+}
+
 main { padding: 8px 0 24px; }
 
 /* Screenshot gallery: framed store shots in four groups.
@@ -292,8 +320,16 @@ a { color: var(--accent); }
     flex-wrap: wrap;
     gap: 24px;
   }
-  .strip li { flex: 0 1 230px; transition: transform .25s ease; }
+  .group { max-width: 1180px; }
+  .strip { gap: 32px; }
+  .strip li { flex: 0 1 340px; transition: transform .25s ease; }
+
   .strip li:hover { transform: translateY(-6px); }
+}
+/* Smaller hero phone on computers so the gallery leads
+   (not on sideways phones, which use the height-based rule above). */
+@media (min-width: 840px) and (min-height: 561px) {
+  .hero .phone { width: min(250px, calc(60vh * 0.46 + var(--bezel))); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
