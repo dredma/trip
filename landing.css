@@ -313,11 +313,13 @@ a { color: var(--accent); }
 @media (min-width: 840px) {
   .hero { padding: 56px 40px 72px; }
   .hero-inner {
-    grid-template-columns: 1fr auto;
+    /* Copy and phone sit together in the middle instead of at the edges. */
+    grid-template-columns: auto auto;
+    justify-content: center;
     align-items: center;
     justify-items: stretch;
     text-align: left;
-    gap: 56px;
+    gap: 64px;
   }
   .hero-copy { max-width: 32em; }
   .tagline, .lead { margin-left: 0; }
@@ -343,7 +345,7 @@ a { color: var(--accent); }
 /* Larger computer screens: everything a step bigger. */
 @media (min-width: 1100px) and (min-height: 561px) {
   .hero { padding: 72px 48px 88px; }
-  .hero-inner { max-width: 1240px; gap: 72px; }
+  .hero-inner { max-width: 1240px; gap: 80px; }
   .hero-copy { max-width: 36em; }
   .icon { width: 88px; height: 88px; border-radius: 22px; }
   h1 { font-size: 76px; }
