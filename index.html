@@ -24,7 +24,7 @@
 <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
 <link rel="icon" href="icon.png" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="landing.css?v=8">
+<link rel="stylesheet" href="landing.css?v=9">
 </head>
 <body>
 <header class="hero">
@@ -195,6 +195,39 @@
     </div>
   </section>
 
+
+  <section class="faq" id="faq">
+    <h2>FAQ</h2>
+    <details>
+      <summary>Is Nimbo free?</summary>
+      <p>Yes. The basic app is free and works fully without an account. Pro is a one-time lifetime unlock, with a 7-day trial — not a subscription.</p>
+    </details>
+    <details>
+      <summary>Do I need an account?</summary>
+      <p>No. Nimbo works fully without an account. Create one only if you want friends, cloud backup or trip links.</p>
+    </details>
+    <details>
+      <summary>Where is my data stored?</summary>
+      <p>Your flights, notes, photos and settings stay on your phone. If you turn on friends, cloud backup or trip links, that copy is hosted by Supabase on a server in London (<span class="nowrap">AWS eu-west-2</span>, United Kingdom). See the <a href="privacy/">privacy&nbsp;policy</a> for details.</p>
+    </details>
+    <details>
+      <summary>Can I import my flights from other apps?</summary>
+      <p>Yes. You can import flights from FlightMemory, App in the Air, Flighty, Logmytrip, OpenFlights, myFlightradar24, or any CSV.</p>
+    </details>
+    <details>
+      <summary>Where do flight times and live status come from?</summary>
+      <p>Live times, gates and delays, and flight verification, come from AeroDataBox, looked up through our server when you ask for them.</p>
+    </details>
+    <details>
+      <summary>How do I delete my account?</summary>
+      <p>In the app, go to Settings → Friends &amp; cloud and tap Delete my account and data. You can also delete your account without the app on the <a href="delete/">delete&nbsp;account</a> page.</p>
+    </details>
+    <details>
+      <summary>When is it on Google Play?</summary>
+      <p>Nimbo is currently in closed testing. Coming soon on Google Play.</p>
+    </details>
+  </section>
+
   <section class="try" id="try">
     <h2>Try it free</h2>
     <ul>
@@ -218,6 +251,70 @@
   </nav>
   <p>No cookies, no trackers, no analytics.</p>
 </footer>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is Nimbo free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The basic app is free and works fully without an account. Pro is a one-time lifetime unlock, with a 7-day trial — not a subscription."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need an account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Nimbo works fully without an account. Create one only if you want friends, cloud backup or trip links."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where is my data stored?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your flights, notes, photos and settings stay on your phone. If you turn on friends, cloud backup or trip links, that copy is hosted by Supabase on a server in London (AWS eu-west-2, United Kingdom). See the privacy policy at https://nimbo.fly/privacy/ for details."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I import my flights from other apps?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. You can import flights from FlightMemory, App in the Air, Flighty, Logmytrip, OpenFlights, myFlightradar24, or any CSV."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Where do flight times and live status come from?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Live times, gates and delays, and flight verification, come from AeroDataBox, looked up through our server when you ask for them."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I delete my account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "In the app, go to Settings → Friends & cloud and tap Delete my account and data. You can also delete your account without the app at https://nimbo.fly/delete/."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When is it on Google Play?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nimbo is currently in closed testing. Coming soon on Google Play."
+      }
+    }
+  ]
+}
+</script>
 <script src="play.js"></script>
 <script src="gallery.js"></script>
 </body>

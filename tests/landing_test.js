@@ -88,4 +88,21 @@ const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8');
 ok(/document\.title = .* · Nimbo/.test(app), 'viewer document title uses Nimbo');
 ok(!/Flight Tracker/.test(app), 'viewer JS has no Flight Tracker title');
 
+
+// FAQ and Open Graph image
+ok(/class="faq" id="faq"/.test(html) && html.indexOf('id="faq"') < html.indexOf('id="try"'), 'FAQ section before Try it free');
+ok((html.match(/<details>/g) || []).length === 7 && (html.match(/<summary>/g) || []).length === 7, 'seven FAQ details accordions');
+const faq = html.slice(html.indexOf('id="faq"'), html.indexOf('id="try"'));
+ok(/href="privacy\/"/.test(faq), 'FAQ links to privacy/');
+ok(/href="delete\/"/.test(faq), 'FAQ links to delete/');
+ok(/AeroDataBox/.test(faq) && !/RapidAPI|API key/.test(faq), 'live data from AeroDataBox, no API key in FAQ');
+ok(/application\/ld\+json/.test(html) && /FAQPage/.test(html), 'FAQPage JSON-LD');
+ok(/og:image" content="https:\/\/nimbo\.fly\/og\.png"/.test(html) && /og:image:width" content="1200"/.test(html) && /og:image:height" content="630"/.test(html), 'og:image with width and height');
+ok(/twitter:card" content="summary_large_image"/.test(html) && /twitter:image" content="https:\/\/nimbo\.fly\/og\.png"/.test(html), 'twitter large image card');
+const og = fs.readFileSync(path.join(root, 'og.png'));
+ok(og[0] === 0x89 && og.toString('ascii', 1, 4) === 'PNG', 'og.png is a PNG');
+ok(og.readUInt32BE(16) === 1200 && og.readUInt32BE(20) === 630, 'og.png is 1200x630');
+ok(og.length < 300 * 1024, 'og.png under 300 KB');
+ok(/landing\.css\?v=9/.test(html) && /\.faq details/.test(css), 'FAQ styles and cache bump');
+
 console.log('ok    landing page');
