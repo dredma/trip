@@ -5,7 +5,7 @@
 <script src="redirect.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; media-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#DD3082">
 <title>Nimbo – My Flight Log</title>
 <meta name="description" content="Your private logbook for every flight. Scan a boarding pass, follow live gates and delays, and see every route on a map — all on your phone.">
@@ -24,7 +24,7 @@
 <link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
 <link rel="icon" href="icon.png" type="image/png" sizes="512x512">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="landing.css?v=9">
+<link rel="stylesheet" href="landing.css?v=10">
 </head>
 <body>
 <header class="hero">
@@ -44,11 +44,10 @@
   <div class="hero-phone">
     <figure class="phone">
       <div class="bezel">
-        <picture>
-          <source type="image/avif" srcset="shots/globe-540.avif 540w, shots/globe-1080.avif 1080w" sizes="(min-width: 1100px) 290px, (min-width: 840px) 250px, 68vw">
-          <source type="image/webp" srcset="shots/globe-540.webp 540w, shots/globe-1080.webp 1080w" sizes="(min-width: 1100px) 290px, (min-width: 840px) 250px, 68vw">
-          <img src="shots/globe-540.jpg" width="540" height="1130" alt="Nimbo 3D globe at night with golden route arcs from Europe to Asia, Africa and the Americas." fetchpriority="high" decoding="async">
-        </picture>
+        <video autoplay muted loop playsinline preload="auto" poster="shots/globe-540.jpg" width="540" height="1130" aria-label="Nimbo 3D globe at night with golden route arcs, rotating slowly and opening airport details when an airport is tapped.">
+          <source src="shots/globe-540.webm" type="video/webm">
+          <source src="shots/globe-540.mp4" type="video/mp4">
+        </video>
       </div>
     </figure>
   </div>

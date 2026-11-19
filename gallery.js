@@ -1,3 +1,23 @@
+// Hero demo clip: autoplay unless the viewer prefers reduced motion.
+(function () {
+  'use strict';
+  var video = document.querySelector('.hero .bezel video');
+  if (!video) return;
+  var still = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function apply() {
+    if (still.matches) {
+      video.pause();
+      try { video.currentTime = 0; } catch (e) {}
+    } else {
+      var play = video.play();
+      if (play && play.catch) play.catch(function () {});
+    }
+  }
+  apply();
+  if (still.addEventListener) still.addEventListener('change', apply);
+  else if (still.addListener) still.addListener(apply);
+})();
+
 // Desktop gallery: when a group's cards don't fit side by side, show them as
 // a one-row carousel with the centre card in focus, rotating every few
 // seconds. Pauses on hover/focus or off screen; no autoplay with reduced

@@ -145,7 +145,7 @@ h1 {
   border: 1px solid rgba(255, 255, 255, .12);
   overflow: hidden;
 }
-.bezel picture, .bezel img {
+.bezel picture, .bezel img, .bezel video {
   display: block;
   width: 100%;
   max-width: 100%;
@@ -189,7 +189,7 @@ h1 {
   border-radius: 28px;
   border: 0;
 }
-.hero .bezel picture, .hero .bezel img { border-radius: 21px; }
+.hero .bezel picture, .hero .bezel img, .hero .bezel video { border-radius: 21px; }
 
 main { padding: 8px 0 24px; }
 

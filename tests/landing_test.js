@@ -22,7 +22,11 @@ ok(/href="delete\/"/.test(html), 'delete link');
 ok(/Your private logbook for every flight/.test(html), 'tagline');
 ok(/Try it free/.test(html), 'primary CTA');
 ok(/play\.js/.test(html) && /data-play/.test(html), 'Play slot and play.js');
-ok(/shots\/globe-540\.(avif|webp|jpg)/.test(html) && /fetchpriority="high"/.test(html), 'globe hero screenshot');
+ok(/<video[^>]*poster="shots\/globe-540\.jpg"/.test(html) && /autoplay/.test(html) && /muted/.test(html) && /loop/.test(html) && /playsinline/.test(html), 'globe hero video with poster');
+ok(/shots\/globe-540\.webm/.test(html) && /shots\/globe-540\.mp4/.test(html), 'hero webm and mp4 sources');
+ok(fs.existsSync(path.join(root, 'shots/globe-540.webm')) && fs.existsSync(path.join(root, 'shots/globe-540.mp4')) && fs.existsSync(path.join(root, 'shots/globe-540.jpg')), 'hero video files and poster exist');
+ok(/media-src 'self'/.test(html), 'csp media-src self');
+ok(/prefers-reduced-motion/.test(fs.readFileSync(path.join(root, 'gallery.js'), 'utf8')) && /\.hero \.bezel video/.test(fs.readFileSync(path.join(root, 'gallery.js'), 'utf8')), 'reduced-motion pauses hero video');
 const shotNames = [...html.matchAll(/shots\/([a-z]+)-540\.jpg/g)].map((m) => m[1]);
 ok(shotNames.length === 14 && new Set(shotNames).size === 14, 'hero plus 13 gallery shots, no duplicates');
 for (const n of shotNames) {
@@ -103,6 +107,6 @@ const og = fs.readFileSync(path.join(root, 'og.png'));
 ok(og[0] === 0x89 && og.toString('ascii', 1, 4) === 'PNG', 'og.png is a PNG');
 ok(og.readUInt32BE(16) === 1200 && og.readUInt32BE(20) === 630, 'og.png is 1200x630');
 ok(og.length < 300 * 1024, 'og.png under 300 KB');
-ok(/landing\.css\?v=9/.test(html) && /\.faq details/.test(css), 'FAQ styles and cache bump');
+ok(/landing\.css\?v=10/.test(html) && /\.faq details/.test(css) && /\.bezel video/.test(css), 'FAQ styles, video bezel, cache bump');
 
 console.log('ok    landing page');
