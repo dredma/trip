@@ -328,9 +328,29 @@ a { color: var(--accent); }
   .strip {
     overflow: visible;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 24px;
   }
+  /* Too narrow for the whole row: one-row carousel (gallery.js), centre
+     card in focus, neighbours smaller and faded. */
+  .strip.carousel {
+    position: relative;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding: 12px 0 40px;
+  }
+  .strip.carousel li {
+    flex: 0 0 340px;
+    transform: scale(.84);
+    opacity: .55;
+    cursor: pointer;
+    transition: transform .5s ease, opacity .5s ease;
+  }
+  .strip.carousel li:first-child { margin-left: calc(50% - 170px); }
+  .strip.carousel li:last-child { margin-right: calc(50% - 170px); }
+  .strip.carousel li.focus { transform: none; opacity: 1; cursor: default; }
+  .strip.carousel li:hover { transform: scale(.88); }
+  .strip.carousel li.focus:hover { transform: translateY(-6px); }
   .group { max-width: 1180px; }
   .strip { gap: 32px; }
   .strip li { flex: 0 1 340px; transition: transform .25s ease; }
@@ -364,7 +384,7 @@ a { color: var(--accent); }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .strip li { transition: none; }
+  .strip li, .strip.carousel li { transition: none; }
   .strip li:hover { transform: none; }
   * { scroll-behavior: auto; }
 }

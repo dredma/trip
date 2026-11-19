@@ -35,6 +35,7 @@ ok(/srcset="shots\/[a-z]+-540\.webp 540w, shots\/[a-z]+-1080\.webp 1080w"/.test(
 ok((html.match(/loading="lazy"/g) || []).length === 14, 'gallery shots and poster lazy-load');
 ok(/shots\/poster-800\.webp 800w, shots\/poster-1600\.webp 1600w/.test(html) && fs.existsSync(path.join(root, 'shots/poster-1600.avif')) && fs.existsSync(path.join(root, 'shots/poster-800.jpg')), 'wide poster image');
 ok(!/s1\.|booking|BFFL7X/i.test(html), 'no booking-code screenshot');
+ok(/<script src="gallery.js"><\/script>/.test(html) && /\.strip\.carousel li\.focus/.test(css) && fs.existsSync(path.join(root, 'gallery.js')), 'desktop carousel when a row does not fit');
 ok(/class="strip"/.test(html) && /scroll-snap-type: x mandatory/.test(css), 'swipeable gallery on phones');
 for (const id of ['globe', 'log', 'stats', 'fun']) ok(html.includes(`id="${id}"`), `gallery group ${id}`);
 ok(/type="image\/avif"/.test(html) && /type="image\/webp"/.test(html), 'avif and webp sources');
