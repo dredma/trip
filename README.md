@@ -57,7 +57,9 @@ to advertise the app on Google Play, and without altering the artwork.
 
 ## App screenshots
 
-`shots/` holds device screenshots of the real app, captured from a test-only
-harness in the app repo (`test/landing_screenshots_test.dart`) with made-up
-demo data. Each shot is stored as AVIF and WebP, with a PNG fallback.
+`shots/` holds real-device screenshots of the app. The hero is the raw globe
+screen; the gallery uses the framed store screenshots (sunset background,
+caption on top) made with `frame_screens.py`. Personal details (booking codes,
+registrations, emails) are blurred or left out. Each shot is stored as AVIF and
+WebP at 540 and 1080 px wide, with a 540 px JPEG fallback.
 

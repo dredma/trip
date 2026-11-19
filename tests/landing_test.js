@@ -22,7 +22,21 @@ ok(/href="delete\/"/.test(html), 'delete link');
 ok(/Your private logbook for every flight/.test(html), 'tagline');
 ok(/Try it free/.test(html), 'primary CTA');
 ok(/play\.js/.test(html) && /data-play/.test(html), 'Play slot and play.js');
-ok(/shots\/flights\.(avif|webp|png)/.test(html), 'hero screenshot');
+ok(/shots\/globe-540\.(avif|webp|jpg)/.test(html) && /fetchpriority="high"/.test(html), 'globe hero screenshot');
+const shotNames = [...html.matchAll(/shots\/([a-z]+)-540\.jpg/g)].map((m) => m[1]);
+ok(shotNames.length === 14 && new Set(shotNames).size === 14, 'hero plus 13 gallery shots, no duplicates');
+for (const n of shotNames) {
+  for (const f of [`${n}-540.avif`, `${n}-1080.avif`, `${n}-540.webp`, `${n}-1080.webp`, `${n}-540.jpg`]) {
+    if (!fs.existsSync(path.join(root, 'shots', f))) throw new Error('missing shots/' + f);
+  }
+}
+ok(true, 'every shot has avif, webp (540w and 1080w) and a jpg fallback');
+ok(/srcset="shots\/[a-z]+-540\.webp 540w, shots\/[a-z]+-1080\.webp 1080w"/.test(html), 'responsive srcset');
+ok((html.match(/loading="lazy"/g) || []).length === 14, 'gallery shots and poster lazy-load');
+ok(/shots\/poster-800\.webp 800w, shots\/poster-1600\.webp 1600w/.test(html) && fs.existsSync(path.join(root, 'shots/poster-1600.avif')) && fs.existsSync(path.join(root, 'shots/poster-800.jpg')), 'wide poster image');
+ok(!/s1\.|booking|BFFL7X/i.test(html), 'no booking-code screenshot');
+ok(/class="strip"/.test(html) && /scroll-snap-type: x mandatory/.test(css), 'swipeable gallery on phones');
+for (const id of ['globe', 'log', 'stats', 'fun']) ok(html.includes(`id="${id}"`), `gallery group ${id}`);
 ok(/type="image\/avif"/.test(html) && /type="image\/webp"/.test(html), 'avif and webp sources');
 ok(/loading="lazy"/.test(html), 'lazy-load below-fold shots');
 ok(/No account needed|no account needed/.test(html), 'no account needed');
