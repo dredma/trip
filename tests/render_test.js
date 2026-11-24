@@ -2,14 +2,20 @@
 const { chromium } = require('playwright-core');
 const now = Date.parse("2026-10-22T15:19:00Z"), iso = (m) => new Date(now + m * 60000).toISOString();
 const delay = { state: "active", display_name: "Kristian", expires_at: iso(14 * 60), live_enabled: true, legs: [
-  { flight_no: "LH1411", airline: "Lufthansa", dep: "ZAG", arr: "FRA", date: "2026-10-22", dep_utc: iso(-95), arr_utc: iso(5), dep_tz: "Europe/Zagreb", arr_tz: "Europe/Berlin", fetched_at: iso(-6),
+  { flight_no: "LH1411", airline: "Lufthansa", dep: "ZAG", arr: "FRA", date: "2026-10-22", dep_utc: iso(-95), arr_utc: iso(5), dep_tz: "Europe/Zagreb", arr_tz: "Europe/Berlin",
+    dep_lat: 45.743, dep_lon: 16.069, arr_lat: 50.037, arr_lon: 8.562, fetched_at: iso(-6),
     live: { status: "EnRoute", aircraft: "Airbus A320neo", dep: { expected: iso(-55), actual: iso(-52), terminal: "1", gate: "B4" }, arr: { expected: iso(42), terminal: "1", gate: "A26" } } },
   { flight_no: "LH400", airline: "Lufthansa", dep: "FRA", arr: "JFK", date: "2026-10-22", dep_utc: iso(75), arr_utc: iso(600), dep_tz: "Europe/Berlin", arr_tz: "America/New_York", fetched_at: iso(-6),
     live: { status: "Expected", dep: { expected: iso(75), gate: "Z25" }, arr: { expected: iso(590) } } } ] };
+const livePos = JSON.parse(JSON.stringify(delay));
+livePos.legs[0].live.location = { lat: 47.8, lon: 12.4, alt_m: 11000, alt_ft: 36089, speed_kmh: 900, speed_kt: 486, track_deg: 320, reported_at: iso(-2) };
+const noCoords = JSON.parse(JSON.stringify(delay));
+delete noCoords.legs[0].dep_lat; delete noCoords.legs[0].dep_lon;
+delete noCoords.legs[0].arr_lat; delete noCoords.legs[0].arr_lon;
 (async () => {
   const b = await chromium.launch({ executablePath: '/usr/bin/google-chrome', args: ['--no-sandbox'] });
   let fail = 0; const ok = (c, m) => { console.log((c ? "ok   " : "FAIL ") + m); if (!c) fail++; };
-  for (const [name, q, status, body] of [["share_trip_delay", "", 200, delay], ["share_trip_delay_12h", "&h=12", 200, delay], ["share_trip_dmy_dot", "&d=dmy_dot", 200, delay], ["share_trip_iso_12h", "&h=12&d=iso", 200, delay], ["share_trip_bad_d", "&d=zzz", 200, delay], ["share_expired", "", 410, { state: "expired" }]]) {
+  for (const [name, q, status, body] of [["share_trip_delay", "", 200, delay], ["share_trip_live", "", 200, livePos], ["share_trip_nocoords", "", 200, noCoords], ["share_trip_delay_12h", "&h=12", 200, delay], ["share_trip_dmy_dot", "&d=dmy_dot", 200, delay], ["share_trip_iso_12h", "&h=12&d=iso", 200, delay], ["share_trip_bad_d", "&d=zzz", 200, delay], ["share_expired", "", 410, { state: "expired" }]]) {
     const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, locale: "en-US", timezoneId: "Europe/Zagreb" });
     await ctx.addInitScript(`{ const N=${now}; const D=Date; Date.now=()=>N; }`);
     const p = await ctx.newPage(); const errs = []; p.on('pageerror', e => errs.push(String(e)));
@@ -19,6 +25,9 @@ const delay = { state: "active", display_name: "Kristian", expires_at: iso(14 * 
     if (name === "share_trip_delay") {
       ok(/\b16:27\b/.test(txt) && !/\d (AM|PM)/.test(txt), "24h default even with en-US browser locale");
       ok(/Thu 22 Oct/.test(txt), "neutral date");
+      ok(/Estimated position/.test(txt) && /Approximate · not for navigation/.test(txt), "estimated plane caption");
+      ok(await p.$("svg.track-svg"), "route svg");
+      ok(await p.$("svg.track-svg g.est") && !(await p.$("div.progress")), "outline plane, no progress bar when map is shown");
       ok(/page checked 17:19/.test(txt) && /valid until Fri 23 Oct 01:19/.test(txt), "checked/expiry in 24h");
       await p.click('#hfmt button[data-h="12"]');
       const t2 = await p.innerText('body');
@@ -27,6 +36,16 @@ const delay = { state: "active", display_name: "Kristian", expires_at: iso(14 * 
       ok(!p.url().includes("h=12") && /16:27/.test(await p.innerText('body')), "toggle back to 24h");
       const ck = await ctx.cookies(); const ls = await p.evaluate(() => localStorage.length + sessionStorage.length);
       ok(ck.length === 0 && ls === 0, "no cookies/storage");
+    }
+    if (name === "share_trip_live") {
+      ok(/11,000 m · 36,089 ft/.test(txt) && /900 km\/h · 486 kt/.test(txt), "live altitude and speed");
+      ok(/Updated 2 min ago/.test(txt) && /Approximate · not for navigation/.test(txt), "fresh position caption");
+      ok(await p.$("svg.track-svg g.live") && !(await p.$("svg.track-svg g.est")), "filled live plane");
+      ok(!(await p.$("div.progress")), "no progress bar when map is shown");
+    }
+    if (name === "share_trip_nocoords") {
+      ok(!(await p.$("svg.track-svg")) && await p.$("div.progress"), "progress bar fallback without coords");
+      ok(!/Estimated position/.test(txt) && !/Approximate · not for navigation/.test(txt), "no map caption without coords");
     }
     if (name === "share_trip_delay_12h") ok(/4:27 PM/.test(txt) && (await p.getAttribute("button[data-h=\"12\"]", "aria-pressed")) === "true", "h=12 param");
     if (name === "share_trip_dmy_dot") ok(/22\.10\.2026/.test(txt) && /valid until 23\.10\.2026 01:19/.test(txt) && !/Thu 22 Oct/.test(txt), "d=dmy_dot");

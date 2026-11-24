@@ -1,4 +1,12 @@
-/* Material 3 colours derived from the app's seed #1E6FD9 (lib/core/theme). System fonts only. */
+/* Material 3 colours derived from the app's seed #1E6FD9 (lib/core/theme).
+   Nunito is self-hosted (OFL), same file as the landing page. */
+@font-face {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: url("fonts/nunito-latin.woff2") format("woff2");
+}
 :root {
   --primary: #2a5ea8; --on-primary: #fff; --primary-c: #d6e3ff; --on-primary-c: #001b3d;
   --surface: #f9f9ff; --on-surface: #191c20; --muted: #43474e; --outline: #c3c6cf;
@@ -18,7 +26,7 @@
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0 auto; max-width: 560px; padding: 0 16px env(safe-area-inset-bottom);
-  font: 16px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font: 16px/1.4 "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   background: var(--surface); color: var(--on-surface);
 }
 a { color: var(--primary); }
@@ -80,3 +88,11 @@ main { display: flex; flex-direction: column; gap: 12px; }
 }
 .auth-form button:disabled { opacity: .6; cursor: default; }
 .auth-err { margin: 0; font-size: 13px; font-weight: 600; color: var(--bad); }
+
+.track-map { margin-top: 14px; }
+.track-svg { display: block; width: 100%; height: auto; aspect-ratio: 320 / 140; }
+.track-svg .arc { fill: none; stroke: var(--primary); stroke-width: 2.2; stroke-linecap: round; }
+.track-svg .apt { fill: var(--primary); stroke: var(--surface); stroke-width: 1.2; }
+.track-svg .live path { fill: #e8a317; stroke: #e8a317; stroke-width: 1.2; stroke-linejoin: round; }
+.track-svg .est path { fill: none; stroke: var(--on-surface); stroke-width: 1.6; stroke-linejoin: round; }
+.track-cap { margin: 6px 0 0; font-size: 12px; color: var(--muted); }

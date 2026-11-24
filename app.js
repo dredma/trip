@@ -86,6 +86,132 @@
     return { label, cls, inAir: s === "EnRoute" || s === "Departed" || s === "Approaching" };
   }
 
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs, ...kids) {
+    const e = document.createElementNS(SVGNS, tag);
+    for (const [k, v] of Object.entries(attrs || {})) if (v != null && v !== false) e.setAttribute(k, v);
+    for (const c of kids.flat()) if (c != null && c !== false) e.append(c.nodeType ? c : String(c));
+    return e;
+  }
+  const num = (v) => { const n = Number(v); return Number.isFinite(n) ? n : null; };
+  function fmtN(n) { return Math.round(n).toLocaleString("en-US"); }
+  function formatAlt(loc) {
+    if (!loc) return null;
+    const m = num(loc.alt_m), f = num(loc.alt_ft);
+    const a = m != null ? fmtN(m) + " m" : null, b = f != null ? fmtN(f) + " ft" : null;
+    return a && b ? a + " · " + b : a || b;
+  }
+  function formatSpd(loc) {
+    if (!loc) return null;
+    const k = num(loc.speed_kmh), t = num(loc.speed_kt);
+    const a = k != null ? fmtN(k) + " km/h" : null, b = t != null ? fmtN(t) + " kt" : null;
+    return a && b ? a + " · " + b : a || b;
+  }
+  function rad(d) { return d * Math.PI / 180; }
+  function deg(r) { return r * 180 / Math.PI; }
+  function gcPoint(lat1, lon1, lat2, lon2, t) {
+    const f = Math.max(0, Math.min(1, t));
+    const p1 = rad(lat1), l1 = rad(lon1), p2 = rad(lat2), l2 = rad(lon2);
+    const a = Math.sin((p2 - p1) / 2) ** 2 + Math.cos(p1) * Math.cos(p2) * Math.sin((l2 - l1) / 2) ** 2;
+    const d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    if (d === 0) return [lat1, lon1];
+    const A = Math.sin((1 - f) * d) / Math.sin(d), B = Math.sin(f * d) / Math.sin(d);
+    const x = A * Math.cos(p1) * Math.cos(l1) + B * Math.cos(p2) * Math.cos(l2);
+    const y = A * Math.cos(p1) * Math.sin(l1) + B * Math.cos(p2) * Math.sin(l2);
+    const z = A * Math.sin(p1) + B * Math.sin(p2);
+    return [deg(Math.atan2(z, Math.sqrt(x * x + y * y))), deg(Math.atan2(y, x))];
+  }
+  function gcCourse(lat1, lon1, lat2, lon2) {
+    const p1 = rad(lat1), p2 = rad(lat2), dl = rad(lon2 - lon1);
+    const y = Math.sin(dl) * Math.cos(p2);
+    const x = Math.cos(p1) * Math.sin(p2) - Math.sin(p1) * Math.cos(p2) * Math.cos(dl);
+    return (deg(Math.atan2(y, x)) + 360) % 360;
+  }
+  function planeMark(leg, now, st) {
+    const depLat = num(leg.dep_lat), depLon = num(leg.dep_lon);
+    const arrLat = num(leg.arr_lat), arrLon = num(leg.arr_lon);
+    if ([depLat, depLon, arrLat, arrLon].some((x) => x == null)) return null;
+    const loc = (leg.live || {}).location;
+    const reported = loc && loc.reported_at ? Date.parse(loc.reported_at) : NaN;
+    const fresh = Number.isFinite(reported) && now - reported <= 15 * MIN
+      && num(loc.lat) != null && num(loc.lon) != null;
+    const tms = times(leg);
+    const depT = ms(tms.depActual || tms.depBest), arrT = ms(tms.arrBest);
+    if (fresh) {
+      return {
+        lat: loc.lat, lon: loc.lon,
+        track: num(loc.track_deg) ?? gcCourse(depLat, depLon, arrLat, arrLon),
+        estimated: false, loc, depLat, depLon, arrLat, arrLon,
+      };
+    }
+    if (!Number.isFinite(depT) || !Number.isFinite(arrT) || arrT <= depT) return null;
+    if (!(st.inAir || (now >= depT && now < arrT))) return null;
+    let f = (now - depT) / (arrT - depT);
+    f = Math.max(0.02, Math.min(0.98, f));
+    const [lat, lon] = gcPoint(depLat, depLon, arrLat, arrLon, f);
+    const [aLat, aLon] = gcPoint(depLat, depLon, arrLat, arrLon, Math.min(1, f + 0.01));
+    return {
+      lat, lon, track: gcCourse(lat, lon, aLat, aLon),
+      estimated: true, loc, depLat, depLon, arrLat, arrLon,
+    };
+  }
+  function projecter(pts) {
+    let minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
+    for (const [lat, lon] of pts) {
+      minLat = Math.min(minLat, lat); maxLat = Math.max(maxLat, lat);
+      minLon = Math.min(minLon, lon); maxLon = Math.max(maxLon, lon);
+    }
+    if (maxLon - minLon > 150) return null;
+    const latSpan = Math.max((maxLat - minLat) * 1.7, 6);
+    const lonSpan = Math.max((maxLon - minLon) * 1.7, 12);
+    const cLat = (minLat + maxLat) / 2, cLon = (minLon + maxLon) / 2;
+    minLat = cLat - latSpan / 2; maxLat = cLat + latSpan / 2;
+    minLon = cLon - lonSpan / 2; maxLon = cLon + lonSpan / 2;
+    const W = 320, H = 140;
+    return (lat, lon) => [
+      (lon - minLon) / (maxLon - minLon) * W,
+      (maxLat - lat) / (maxLat - minLat) * H,
+    ];
+  }
+  function trackMap(leg, t, st) {
+    const mark = planeMark(leg, Date.now(), st);
+    if (!mark) return null;
+    const pts = [];
+    for (let i = 0; i <= 24; i++) pts.push(gcPoint(mark.depLat, mark.depLon, mark.arrLat, mark.arrLon, i / 24));
+    const proj = projecter([...pts, [mark.lat, mark.lon]]);
+    if (!proj) return null;
+    const d = pts.map((p, i) => {
+      const [x, y] = proj(p[0], p[1]);
+      return (i ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
+    }).join(" ");
+    const [px, py] = proj(mark.lat, mark.lon);
+    const [ox, oy] = proj(mark.depLat, mark.depLon);
+    const [dx, dy] = proj(mark.arrLat, mark.arrLon);
+    const plane = svgEl("g", { transform: `translate(${px.toFixed(1)} ${py.toFixed(1)}) rotate(${mark.track.toFixed(1)})`, class: mark.estimated ? "est" : "live" },
+      svgEl("path", { d: "M0,-8 L5,7 L0,4 L-5,7 Z" }));
+    const svg = svgEl("svg", { viewBox: "0 0 320 140", class: "track-svg", "aria-hidden": "true" },
+      svgEl("path", { d, class: "arc" }),
+      svgEl("circle", { cx: ox.toFixed(1), cy: oy.toFixed(1), r: 3.5, class: "apt" }),
+      svgEl("circle", { cx: dx.toFixed(1), cy: dy.toFixed(1), r: 3.5, class: "apt" }),
+      plane);
+    const facts = [];
+    if (!mark.estimated) {
+      const alt = formatAlt(mark.loc), spd = formatSpd(mark.loc);
+      if (alt) facts.push(alt);
+      if (spd) facts.push(spd);
+      if (mark.loc && mark.loc.reported_at) {
+        const agoMin = Math.round((Date.now() - Date.parse(mark.loc.reported_at)) / MIN);
+        facts.push(agoMin < 1 ? "Updated just now" : "Updated " + agoMin + " min ago");
+      }
+    } else {
+      facts.push("Estimated position");
+    }
+    facts.push("Approximate · not for navigation");
+    return h("div", { class: "track-map", "aria-label": "Flight path" },
+      svg, h("p", { class: "track-cap" }, facts.join(" · ")));
+  }
+
+
   function endBlock(iata, best, sched, tz, label) {
     const diff = (ms(best) - ms(sched)) / MIN;
     const changed = Math.abs(diff) >= 5;
@@ -105,9 +231,10 @@
     fact("Terminal", d.terminal); fact("Gate", d.gate); fact("Check-in", d.check_in);
     fact("Arr. terminal", a.terminal); fact("Arr. gate", a.gate); fact("Belt", a.belt); fact("Aircraft", L.aircraft);
 
+    const map = trackMap(leg, t, st);
     let progress = null;
     const now = Date.now(), dep0 = ms(t.depActual || t.depBest), arr0 = ms(t.arrBest);
-    if ((st.inAir || (now > dep0 && now < arr0 && leg.live)) && L.status !== "Arrived") {
+    if (!map && (st.inAir || (now > dep0 && now < arr0 && leg.live)) && L.status !== "Arrived") {
       const p = Math.max(0.02, Math.min(0.98, (now - dep0) / (arr0 - dep0)));
       progress = h("div", { class: "progress" },
         h("div", { class: "bar", role: "progressbar", "aria-valuenow": Math.round(p * 100), "aria-valuemin": 0, "aria-valuemax": 100 },
@@ -131,7 +258,8 @@
         endBlock(leg.dep, t.depBest, t.depS, t.depTz, "Sched."),
         h("div", { class: "mid" }, h("div", { class: "plane" }, "✈"), dur(blockMin)),
         endBlock(leg.arr, t.arrBest, t.arrS, t.arrTz, "Sched.")),
-      delay, facts.length ? h("div", { class: "facts" }, facts) : null, progress);
+      delay, facts.length ? h("div", { class: "facts" }, facts) : null,
+      map, progress);
   }
 
   function layover(prev, next) {
@@ -201,8 +329,9 @@
         lastData = data; lastOk = Date.now(); render(data);
         // Faster while a leg is close or in the air, slower otherwise (2–5 min).
         const now = Date.now();
+        const inAir = data.legs.some((l) => statusOf(l, times(l)).inAir);
         const busy = data.legs.some((l) => { const t = times(l); return now > ms(t.depBest) - 3 * 3600000 && now < ms(t.arrBest) + 1800000; });
-        delay = (busy ? 120 : 300) * 1000;
+        delay = (inAir ? 120 : busy ? 180 : 300) * 1000;
       }
     } catch (e) {
       if (lastData) { render(lastData); $("updated").textContent += " · offline, retrying"; }
