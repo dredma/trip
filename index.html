@@ -8,22 +8,27 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; media-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="theme-color" content="#DD3082">
 <title>Nimbo – My Flight Log</title>
-<meta name="description" content="Your private logbook for every flight. Scan a boarding pass, follow live gates and delays, and see every route on a map — all on your phone.">
+<meta name="description" content="Nimbo is a flight log app for Android. Scan a boarding pass, follow live gates and delays, and see every route on a map — all on your phone.">
 <link rel="canonical" href="https://nimbo.fly/">
 <meta property="og:title" content="Nimbo – My Flight Log">
-<meta property="og:description" content="Your private logbook for every flight.">
+<meta property="og:description" content="A flight log app for Android. Your private logbook for every flight.">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Nimbo">
+<meta property="og:locale" content="en">
 <meta property="og:url" content="https://nimbo.fly/">
 <meta property="og:image" content="https://nimbo.fly/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Nimbo – My Flight Log">
-<meta name="twitter:description" content="Your private logbook for every flight.">
+<meta name="twitter:description" content="A flight log app for Android. Your private logbook for every flight.">
 <meta name="twitter:image" content="https://nimbo.fly/og.png">
-<link rel="icon" href="favicon.png" type="image/png" sizes="32x32">
-<link rel="icon" href="icon.png" type="image/png" sizes="512x512">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="twitter:image:alt" content="Nimbo – Your private logbook for every flight, with the 3D globe of routes on a phone.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/icon.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="landing.css?v=10">
 </head>
 <body>
@@ -33,7 +38,7 @@
     <img class="icon" src="icon.png" width="72" height="72" alt="Nimbo">
     <h1>Nimbo</h1>
     <p class="tagline">Your private logbook for every flight.</p>
-    <p class="lead">Scan a pass, follow live gates, and see your routes on a map. It stays on your phone.</p>
+    <p class="lead">Nimbo is a flight log app for Android. Scan a pass, follow live gates, and see your routes on a map. It stays on your phone.</p>
     <div class="hero-cta">
       <a class="cta" href="#try">Try it free</a>
       <div class="play-slot" data-play>
@@ -44,7 +49,7 @@
   <div class="hero-phone">
     <figure class="phone">
       <div class="bezel">
-        <video autoplay muted loop playsinline preload="auto" poster="shots/globe-540.jpg" width="540" height="1130" aria-label="Nimbo 3D globe at night with golden route arcs, rotating slowly and opening airport details when an airport is tapped.">
+        <video autoplay muted loop playsinline preload="auto" poster="shots/globe-540.webp" width="540" height="1130" aria-label="Nimbo 3D globe at night with golden route arcs, rotating slowly and opening airport details when an airport is tapped.">
           <source src="shots/globe-720.mp4" type="video/mp4">
         </video>
       </div>
@@ -309,6 +314,39 @@
         "@type": "Answer",
         "text": "Coming soon on Google Play."
       }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://nimbo.fly/#organization",
+      "name": "Nimbo",
+      "url": "https://nimbo.fly/",
+      "logo": "https://nimbo.fly/icon.png",
+      "email": "contact@nimbo.fly",
+      "founder": { "@type": "Person", "name": "Kristian Popovic" }
+    },
+    {
+      "@type": ["MobileApplication", "SoftwareApplication"],
+      "name": "Nimbo",
+      "alternateName": "Nimbo – My Flight Log",
+      "description": "A flight log app for Android. Scan a boarding pass, follow live gates and delays, and see every route on a map — all on your phone.",
+      "url": "https://nimbo.fly/",
+      "image": "https://nimbo.fly/og.png",
+      "applicationCategory": "TravelApplication",
+      "operatingSystem": "Android",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR",
+        "description": "The basic app is free. Pro is a one-time lifetime unlock, with a 7-day trial — not a subscription."
+      },
+      "publisher": { "@id": "https://nimbo.fly/#organization" }
     }
   ]
 }

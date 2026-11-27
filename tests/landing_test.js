@@ -22,13 +22,13 @@ ok(/href="delete\/"/.test(html), 'delete link');
 ok(/Your private logbook for every flight/.test(html), 'tagline');
 ok(/Try it free/.test(html), 'primary CTA');
 ok(/play\.js/.test(html) && /data-play/.test(html), 'Play slot and play.js');
-ok(/<video[^>]*poster="shots\/globe-540\.jpg"/.test(html) && /autoplay/.test(html) && /muted/.test(html) && /loop/.test(html) && /playsinline/.test(html), 'globe hero video with poster');
+ok(/<video[^>]*poster="shots\/globe-540\.webp"/.test(html) && /autoplay/.test(html) && /muted/.test(html) && /loop/.test(html) && /playsinline/.test(html), 'globe hero video with poster');
 ok(/shots\/globe-720\.mp4/.test(html), 'hero mp4 source');
 ok(fs.existsSync(path.join(root, 'shots/globe-720.mp4')) && fs.existsSync(path.join(root, 'shots/globe-540.jpg')), 'hero video files and poster exist');
 ok(/media-src 'self'/.test(html), 'csp media-src self');
 ok(/prefers-reduced-motion/.test(fs.readFileSync(path.join(root, 'gallery.js'), 'utf8')) && /\.hero \.bezel video/.test(fs.readFileSync(path.join(root, 'gallery.js'), 'utf8')), 'reduced-motion pauses hero video');
 const shotNames = [...html.matchAll(/shots\/([a-z]+)-540\.jpg/g)].map((m) => m[1]);
-ok(shotNames.length === 14 && new Set(shotNames).size === 14, 'hero plus 13 gallery shots, no duplicates');
+ok(shotNames.length === 13 && new Set(shotNames).size === 13, '13 gallery shots, no duplicates');
 for (const n of shotNames) {
   for (const f of [`${n}-540.avif`, `${n}-1080.avif`, `${n}-540.webp`, `${n}-1080.webp`, `${n}-540.jpg`]) {
     if (!fs.existsSync(path.join(root, 'shots', f))) throw new Error('missing shots/' + f);
@@ -58,7 +58,7 @@ ok(/Nunito/.test(css) && /nunito-latin\.woff2/.test(css), 'self-hosted Nunito');
 ok(/#441E8D/.test(css) && /#FD6229/.test(css), 'sunset palette');
 ok(/70vh/.test(css) && /max-width: 320px/.test(css), 'phone frames capped on large screens');
 ok(/app\.js/.test(trip) && /config\.js/.test(trip), 'viewer still loads scripts');
-ok(/href="\.\.\/privacy\.html"/.test(trip), 'viewer privacy path');
+ok(/href="\.\.\/privacy\/"/.test(trip), 'viewer privacy path');
 ok(/noindex/.test(trip), 'viewer stays noindex');
 ok(!/noindex/.test(html), 'landing is indexable');
 
@@ -108,5 +108,27 @@ ok(og[0] === 0x89 && og.toString('ascii', 1, 4) === 'PNG', 'og.png is a PNG');
 ok(og.readUInt32BE(16) === 1200 && og.readUInt32BE(20) === 630, 'og.png is 1200x630');
 ok(og.length < 300 * 1024, 'og.png under 300 KB');
 ok(/landing\.css\?v=10/.test(html) && /\.faq details/.test(css) && /\.bezel video/.test(css), 'FAQ styles, video bezel, cache bump');
+
+
+ok(/flight log app for Android/.test(html), 'homepage names flight log app for Android');
+ok(/Coming soon on Google Play/.test(html) && !/closed test/i.test(html), 'coming soon, no testing mention');
+ok(/og:site_name" content="Nimbo"/.test(html) && /og:locale" content="en"/.test(html), 'og site_name and locale');
+ok(/twitter:image:alt" content="/.test(html), 'twitter image alt');
+ok(/MobileApplication/.test(html) && /SoftwareApplication/.test(html) && /TravelApplication/.test(html) && /"operatingSystem": "Android"/.test(html), 'app JSON-LD');
+ok(/"@type": "Organization"/.test(html) && /"price": "0"/.test(html) && /"priceCurrency": "EUR"/.test(html), 'organization and free offer JSON-LD');
+ok(!/"aggregateRating"/.test(html), 'no invented ratings');
+ok(fs.existsSync(path.join(root, 'robots.txt')) && /Sitemap: https:\/\/nimbo\.fly\/sitemap\.xml/.test(fs.readFileSync(path.join(root, 'robots.txt'), 'utf8')), 'robots.txt points at sitemap');
+ok(!/Disallow: \/auth|Disallow: \/trip/.test(fs.readFileSync(path.join(root, 'robots.txt'), 'utf8')), 'robots does not disallow auth or trip');
+const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
+ok(/https:\/\/nimbo\.fly\/<\/loc>/.test(sitemap) && /https:\/\/nimbo\.fly\/privacy\/<\/loc>/.test(sitemap) && /https:\/\/nimbo\.fly\/terms\/<\/loc>/.test(sitemap) && /https:\/\/nimbo\.fly\/delete\/<\/loc>/.test(sitemap), 'sitemap has public pages');
+ok(!/\/auth\/|\/trip\//.test(sitemap), 'sitemap omits private pages');
+ok(fs.existsSync(path.join(root, '404.html')) && /noindex/.test(fs.readFileSync(path.join(root, '404.html'), 'utf8')) && /Nimbo/.test(fs.readFileSync(path.join(root, '404.html'), 'utf8')), 'branded noindex 404');
+ok(fs.existsSync(path.join(root, 'favicon.ico')), 'favicon.ico');
+ok(/rel="icon" href="\/favicon\.ico"/.test(html), 'root favicon.ico link');
+ok(/rel="preload" href="\/fonts\/nunito-latin\.woff2"/.test(html), 'font preload');
+ok(fs.existsSync(path.join(root, 'privacy/trip-links/index.html')), 'trip-links privacy page');
+const redir = fs.readFileSync(path.join(root, 'privacy.html'), 'utf8');
+ok(/http-equiv="refresh"/.test(redir) && /canonical" href="https:\/\/nimbo\.fly\/privacy\/"/.test(redir) && /noindex/.test(redir), 'privacy.html redirects to /privacy/');
+ok(fs.existsSync(path.join(root, 'shots/globe-540.webp')), 'webp video poster file');
 
 console.log('ok    landing page');

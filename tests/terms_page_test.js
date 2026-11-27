@@ -27,18 +27,18 @@ ok(/trip links you already created stay/.test(html), 'links kept');
 ok(/not an operational or safety/.test(html), 'accuracy disclaimer');
 ok(/Republic of Croatia/.test(html), 'governing law');
 ok(/mandatory rights as a consumer/.test(html), 'consumer rights');
-ok(/href="\.\.\/privacy\.html"/.test(html), 'relative privacy link');
+ok(/href="\.\.\/privacy\/"/.test(html) && /href="\.\.\/privacy\/trip-links\/"/.test(html), 'relative privacy and trip-links links');
 ok(/href="\.\.\/delete\/"/.test(html), 'relative delete link');
 ok(!/legal advice/.test(html.toLowerCase()), 'no legal-advice disclaimer');
 ok(/url\("\.\.\/fonts\/nunito-latin\.woff2"\)/.test(css), 'relative font path');
 ok(/font-src 'self'/.test(html), 'csp fonts');
 ok(!/script-src/.test(html), 'no scripts');
 
-const privacy = fs.readFileSync(path.join(__dirname, '../privacy.html'), 'utf8');
+const privacy = fs.readFileSync(path.join(__dirname, '../privacy/trip-links/index.html'), 'utf8');
 ok(!/Rovinj|Kristian Popovic|Controller\./.test(privacy), 'trip-link privacy has no controller address');
-ok(/Who is responsible\.<\/b> See our <a href="\.\/privacy\/">privacy policy<\/a>/.test(privacy) && /mailto:privacy@nimbo\.fly/.test(privacy), 'trip-link privacy points to policy');
+ok(/Who is responsible\.<\/b> See our <a href="\.\.\/">privacy policy<\/a>/.test(privacy) && /mailto:privacy@nimbo\.fly/.test(privacy), 'trip-link privacy points to policy');
 ok(!/contact details to be completed/.test(privacy), 'no privacy placeholder');
-ok(/href="\.\/terms\/"/.test(privacy), 'privacy links to terms');
+ok(/href="\.\.\/\.\.\/terms\/"/.test(privacy), 'privacy links to terms');
 const del = fs.readFileSync(path.join(__dirname, '../delete/index.html'), 'utf8');
 ok(!/class="dev"/.test(del) && (del.match(/developer Kristian Popovic/g) || []).length === 1 && /<footer class="foot">\s*<p>Nimbo · developer Kristian Popovic/.test(del), 'delete page: developer line only in footer');
 ok(/href="\.\.\/terms\/"/.test(del), 'delete links to terms');
@@ -50,14 +50,14 @@ ok(!/own API key/.test(policy + privacy), 'policy has no API key sentence');
 ok(/<footer class="foot">\s*<p>Nimbo flight log app for Android, by developer Kristian Popovic, Rovinj, Croatia · contact@nimbo\.fly<\/p>/.test(policy), 'controller in footer');
 ok(/write to privacy@nimbo\.fly/.test(policy), 'rights email kept');
 ok(/privacy@nimbo.fly/.test(policy), 'policy email');
-ok(/<p>Effective and last updated: 18 November 2026<\/p>/.test(policy) && !/draft|not yet reviewed/i.test(policy + html + del + privacy), 'policy date, no draft label');
+ok(/<p>Effective and last updated: 24 November 2026<\/p>/.test(policy) && !/draft|not yet reviewed/i.test(policy + html + del + privacy), 'policy date, no draft label');
 ok(!/to be completed/.test(policy), 'no policy placeholder');
 
 ok(!/Flight Tracker/.test(privacy), 'trip-link note uses the Nimbo name');
 ok(!/Brace|52210/.test(privacy + policy), 'city and country only');
 
 // Feedback mailto in every legal footer and on the landing page.
-for (const f of ['../index.html', '../privacy/index.html', '../terms/index.html', '../delete/index.html', '../privacy.html']) {
+for (const f of ['../index.html', '../privacy/index.html', '../terms/index.html', '../delete/index.html', '../privacy/trip-links/index.html']) {
   const h = fs.readFileSync(path.join(__dirname, f), 'utf8');
   ok(/<a href="mailto:contact@nimbo\.fly\?subject=Nimbo%20feedback">Feedback<\/a>/.test(h), 'feedback link in ' + f);
 }

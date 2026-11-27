@@ -9,6 +9,13 @@ Static site served by GitHub Pages at `https://nimbo.fly/`.
 * No build step, no cookies, no storage, no analytics, no third-party fonts
   or scripts. Nunito is self-hosted in `fonts/` (SIL Open Font License).
 
+* Public pages are listed in `sitemap.xml`. `robots.txt` allows crawlers
+  and points to the sitemap. Auth and trip-share pages stay out of the
+  sitemap and have `noindex`.
+* The privacy policy is at `https://nimbo.fly/privacy/`. `/privacy` and
+  `/privacy.html` refresh to that address. The short trip-link notice is at
+  `https://nimbo.fly/privacy/trip-links/`.
+
 The trip page reads live data from the Supabase Edge Function `trip` (source
 in the app repo, `server/supabase/functions/trip`). `config.js` holds the
 project URL and the **anon (public) key**, which is public by design. Links
